@@ -1,0 +1,11 @@
+targets:
+  $default:
+    builders:
+      injectable_generator:injectable_builder:
+        options:
+          auto_register: true
+          class_name_pattern: "Service$|Repository$|Bloc$"
+      json_serializable:json_serializable:
+        options:
+          explicit_to_json: true
+          include_if_null: false 
