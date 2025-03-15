@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../domain/entities/transaction_type.dart';
 import '../bloc/form/transaction_form_bloc.dart';
 
@@ -12,6 +13,8 @@ class TransactionForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return BlocConsumer<TransactionFormBloc, TransactionFormState>(
       listenWhen: (pre, current) {
         return pre.amount != current.amount;
@@ -32,7 +35,7 @@ class TransactionForm extends StatelessWidget {
             TextFormField(
               controller: _amountController,
               decoration: InputDecoration(
-                labelText: 'Amount',
+                labelText: l10n.amount,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 isDense: true,
                 labelStyle: const TextStyle(
@@ -95,7 +98,7 @@ class TransactionForm extends StatelessWidget {
             DropdownButtonFormField<TransactionType>(
               value: state.type,
               decoration: InputDecoration(
-                labelText: 'Type',
+                labelText: l10n.type,
                 floatingLabelBehavior: FloatingLabelBehavior.auto,
                 isDense: true,
                 labelStyle: const TextStyle(
@@ -166,7 +169,7 @@ class TransactionForm extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          type.name,
+                          type == TransactionType.income ? l10n.income : l10n.expense,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -206,7 +209,7 @@ class TransactionForm extends StatelessWidget {
               },
               child: InputDecorator(
                 decoration: InputDecoration(
-                  labelText: 'Date',
+                  labelText: l10n.date,
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
                   isDense: true,
                   labelStyle: const TextStyle(
@@ -247,10 +250,11 @@ class TransactionForm extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  DateFormat('yyyy-MM-dd').format(state.date),
+                  DateFormat.yMd(Localizations.localeOf(context).languageCode).format(state.date),
                   style: const TextStyle(
                     color: Color(0xFF424242),
                     fontSize: 15,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -288,22 +292,30 @@ class TransactionForm extends StatelessWidget {
             if (state.error != null)
               const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () => context.read<TransactionFormBloc>()
-                  .add(const TransactionFormEvent.submitted()),
+              onPressed: () {
+                context.read<TransactionFormBloc>()
+                    .add(const TransactionFormEvent.submitted());
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(l10n.transactionAdded),
+                    backgroundColor: Colors.green,
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
                 backgroundColor: const Color(0xFF2E7D32),
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
-                elevation: 0,
               ),
-              child: const Text(
-                'Add Transaction',
-                style: TextStyle(
+              child: Text(
+                l10n.save,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
                 ),
               ),
             ),

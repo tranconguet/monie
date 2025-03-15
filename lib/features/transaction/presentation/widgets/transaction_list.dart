@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/entities/transaction_type.dart';
 import '../bloc/transaction_bloc.dart';
@@ -34,6 +35,8 @@ class _TransactionListState extends State<TransactionList> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return BlocConsumer<TransactionBloc, TransactionState>(
       listenWhen: (previous, current) {
         return current.maybeWhen(
@@ -99,14 +102,14 @@ class _TransactionListState extends State<TransactionList> {
           loading: () => Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                CircularProgressIndicator(
+              children: [
+                const CircularProgressIndicator(
                   color: Color(0xFF2E7D32),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
-                  'Loading transactions...',
-                  style: TextStyle(
+                  l10n.loadingTransactions,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: Color(0xFF757575),

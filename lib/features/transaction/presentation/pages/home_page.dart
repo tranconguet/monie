@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../bloc/transaction_bloc.dart';
 import '../group_by_type.dart';
 import '../widgets/transaction_form.dart';
@@ -55,6 +56,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return BlocListener<TransactionBloc, TransactionState>(
       listener: (context, state) {
         state.whenOrNull(
@@ -95,11 +98,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                 child: AppBar(
-                  title: const Text('Money Manager'),
+                  title: Text(l10n.appName),
                   actions: [
                     IconButton(
                       icon: const Icon(Icons.settings_rounded),
-                      tooltip: 'Settings',
+                      tooltip: l10n.settings,
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -163,9 +166,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                     ),
                                   ),
                                   const SizedBox(width: 12),
-                                  const Text(
-                                    'New Transaction',
-                                    style: TextStyle(
+                                  Text(
+                                    l10n.newTransaction,
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -216,9 +219,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             ),
                           ),
                           const SizedBox(width: 12),
-                          const Text(
-                            'Group by:',
-                            style: TextStyle(
+                          Text(
+                            l10n.groupBy,
+                            style: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                             ),
@@ -259,22 +262,22 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               ),
                               dropdownColor: Theme.of(context).colorScheme.surface,
                               borderRadius: BorderRadius.circular(12),
-                              items: const [
+                              items: [
                                 DropdownMenuItem(
                                   value: GroupByType.type,
-                                  child: Text('Type'),
+                                  child: Text(l10n.type),
                                 ),
                                 DropdownMenuItem(
                                   value: GroupByType.day,
-                                  child: Text('Day'),
+                                  child: Text(l10n.day),
                                 ),
                                 DropdownMenuItem(
                                   value: GroupByType.month,
-                                  child: Text('Month'),
+                                  child: Text(l10n.month),
                                 ),
                                 DropdownMenuItem(
                                   value: GroupByType.year,
-                                  child: Text('Year'),
+                                  child: Text(l10n.year),
                                 ),
                               ],
                               onChanged: (value) {
@@ -319,9 +322,9 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                   ),
                                 ),
                                 const SizedBox(width: 12),
-                                const Text(
-                                  'Transactions',
-                                  style: TextStyle(
+                                Text(
+                                  l10n.transactions,
+                                  style: const TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                   ),

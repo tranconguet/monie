@@ -3,13 +3,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../data/models/transaction_model.dart';
 import '../bloc/transaction_bloc.dart';
+import '../../../../core/providers/language_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
   Future<bool> _showClearDataConfirmation(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    
     return await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
@@ -22,23 +27,23 @@ class SettingsPage extends StatelessWidget {
                 size: 24,
               ),
               const SizedBox(width: 12),
-              const Text('Clear All Data'),
+              Text(l10n.clearAllData),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Are you sure you want to clear all data?',
-                style: TextStyle(
+              Text(
+                l10n.clearDataConfirmation,
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'This will delete all transactions and cannot be undone.',
+                l10n.clearDataWarning,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
@@ -48,7 +53,7 @@ class SettingsPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(l10n.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
@@ -56,7 +61,7 @@ class SettingsPage extends StatelessWidget {
                 foregroundColor: Theme.of(context).colorScheme.error,
                 backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
               ),
-              child: const Text('Clear All Data'),
+              child: Text(l10n.clearAllData),
             ),
           ],
         );
@@ -65,6 +70,8 @@ class SettingsPage extends StatelessWidget {
   }
 
   Future<void> _clearAllData(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    
     try {
       final box = await Hive.openBox<TransactionModel>('transactions');
       await box.clear();
@@ -80,7 +87,7 @@ class SettingsPage extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
               const SizedBox(width: 12),
-              const Text('All data has been cleared'),
+              Text(l10n.allDataCleared),
             ],
           ),
           backgroundColor: Colors.green,
@@ -97,7 +104,7 @@ class SettingsPage extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onError,
               ),
               const SizedBox(width: 12),
-              const Text('Failed to clear data'),
+              Text(l10n.failedToClearData),
             ],
           ),
           backgroundColor: Theme.of(context).colorScheme.error,
@@ -107,8 +114,46 @@ class SettingsPage extends StatelessWidget {
     }
   }
 
+  Future<void> _showLanguageSelection(BuildContext context) async {
+    final languageProvider = Provider.of<LanguageProvider>(context, listen: false);
+    final l10n = AppLocalizations.of(context)!;
+    
+    final selectedLanguage = await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(l10n.language),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Text('🇺🇸'),
+                title: Text(l10n.english),
+                selected: languageProvider.locale.languageCode == 'en',
+                onTap: () => Navigator.of(context).pop('en'),
+              ),
+              ListTile(
+                leading: const Text('🇻🇳'),
+                title: Text(l10n.vietnamese),
+                selected: languageProvider.locale.languageCode == 'vi',
+                onTap: () => Navigator.of(context).pop('vi'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selectedLanguage != null) {
+      await languageProvider.setLanguage(selectedLanguage);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final languageProvider = Provider.of<LanguageProvider>(context);
+    
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: PreferredSize(
@@ -135,7 +180,7 @@ class SettingsPage extends StatelessWidget {
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
               child: AppBar(
-                title: const Text('Settings'),
+                title: Text(l10n.settings),
               ),
             ),
           ),
@@ -158,7 +203,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               _buildSection(
                 context,
-                title: 'General',
+                title: l10n.general,
                 icon: Icons.settings_rounded,
                 children: [
                   ListTile(
@@ -174,14 +219,14 @@ class SettingsPage extends StatelessWidget {
                         size: 24,
                       ),
                     ),
-                    title: const Text(
-                      'Theme',
-                      style: TextStyle(
+                    title: Text(
+                      l10n.theme,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     subtitle: Text(
-                      'Light',
+                      l10n.light,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -207,31 +252,28 @@ class SettingsPage extends StatelessWidget {
                         size: 24,
                       ),
                     ),
-                    title: const Text(
-                      'Language',
-                      style: TextStyle(
+                    title: Text(
+                      l10n.language,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     subtitle: Text(
-                      'English',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      languageProvider.getLanguageName(
+                        languageProvider.locale.languageCode,
                       ),
                     ),
                     trailing: Icon(
                       Icons.chevron_right_rounded,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
-                    onTap: () {
-                      // TODO: Implement language selection
-                    },
+                    onTap: () => _showLanguageSelection(context),
                   ),
                 ],
               ),
               _buildSection(
                 context,
-                title: 'About',
+                title: l10n.about,
                 icon: Icons.info_outline_rounded,
                 children: [
                   ListTile(
@@ -247,9 +289,9 @@ class SettingsPage extends StatelessWidget {
                         size: 24,
                       ),
                     ),
-                    title: const Text(
-                      'Version',
-                      style: TextStyle(
+                    title: Text(
+                      l10n.version,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -273,14 +315,14 @@ class SettingsPage extends StatelessWidget {
                         size: 24,
                       ),
                     ),
-                    title: const Text(
-                      'Source Code',
-                      style: TextStyle(
+                    title: Text(
+                      l10n.sourceCode,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     subtitle: Text(
-                      'View on GitHub',
+                      l10n.viewOnGithub,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -297,7 +339,7 @@ class SettingsPage extends StatelessWidget {
               ),
               _buildSection(
                 context,
-                title: 'Data',
+                title: l10n.data,
                 icon: Icons.storage_rounded,
                 children: [
                   ListTile(
@@ -313,14 +355,14 @@ class SettingsPage extends StatelessWidget {
                         size: 24,
                       ),
                     ),
-                    title: const Text(
-                      'Clear data',
-                      style: TextStyle(
+                    title: Text(
+                      l10n.clearData,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     subtitle: Text(
-                      'Delete all transactions',
+                      l10n.deleteAllTransactions,
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),

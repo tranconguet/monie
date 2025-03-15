@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/entities/transaction_type.dart';
 import '../../domain/models/grouped_transactions.dart';
@@ -31,8 +32,8 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
   final Set<int> _expandedGroups = {};
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _updateGroups();
   }
 
@@ -65,6 +66,7 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
   }
 
   void _updateGroups() {
+    final l10n = AppLocalizations.of(context)!;
     final groups = <String, List<Transaction>>{};
 
     // Sort transactions by date first
@@ -74,7 +76,9 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
     switch (widget.groupByType) {
       case GroupByType.type:
         for (final transaction in sortedTransactions) {
-          final type = transaction.type.name;
+          final type = transaction.type == TransactionType.income
+              ? l10n.income
+              : l10n.expense;
           groups.putIfAbsent(type, () => []).add(transaction);
         }
         break;
@@ -133,29 +137,31 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     if (widget.transactions.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(
+          children: [
+            const Icon(
               Icons.receipt_long_outlined,
               size: 64,
               color: Color(0xFFBDBDBD),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              'No transactions yet',
-              style: TextStyle(
+              l10n.noTransactions,
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
                 color: Color(0xFF757575),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
-              'Add your first transaction above',
-              style: TextStyle(
+              l10n.addFirstTransaction,
+              style: const TextStyle(
                 color: Color(0xFF9E9E9E),
               ),
             ),

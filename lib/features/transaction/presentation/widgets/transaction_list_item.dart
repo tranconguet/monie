@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../../../../core/l10n/app_localizations.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/entities/transaction_type.dart';
 
@@ -19,6 +20,8 @@ class _DeleteButtonState extends State<_DeleteButton> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -34,7 +37,7 @@ class _DeleteButtonState extends State<_DeleteButton> {
           ),
         ),
         onPressed: widget.onDelete,
-        tooltip: 'Delete transaction',
+        tooltip: l10n.deleteTransaction,
       ),
     );
   }
@@ -53,32 +56,48 @@ class TransactionListItem extends StatelessWidget {
   });
 
   Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    final l10n = AppLocalizations.of(context)!;
+    
     return await showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Row(
-            children: const [
-              Icon(
+            children: [
+              const Icon(
                 Icons.warning_amber_rounded,
                 color: Color(0xFFE53935),
                 size: 24,
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Text(
-                'Delete Transaction',
-                style: TextStyle(
+                l10n.deleteTransaction,
+                style: const TextStyle(
                   color: Color(0xFF424242),
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ],
           ),
-          content: const Text(
-            'Are you sure you want to delete this transaction? This action cannot be undone.',
-            style: TextStyle(
-              color: Color(0xFF757575),
-            ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.deleteTransactionConfirmation,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                l10n.deleteTransactionWarning,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -92,9 +111,9 @@ class TransactionListItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
+              child: Text(
+                l10n.cancel,
+                style: const TextStyle(
                   color: Color(0xFF757575),
                   fontWeight: FontWeight.w500,
                 ),
@@ -110,9 +129,9 @@ class TransactionListItem extends StatelessWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: const Text(
-                'Delete',
-                style: TextStyle(
+              child: Text(
+                l10n.delete,
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -125,12 +144,21 @@ class TransactionListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return Card(
       child: InkWell(
         onTap: () async {
           if (onDelete != null) {
             if (await _showDeleteConfirmation(context)) {
               onDelete?.call();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(l10n.transactionDeleted),
+                  backgroundColor: Colors.green,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
             }
           }
         },
@@ -171,7 +199,8 @@ class TransactionListItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      DateFormat('MMM d, y').format(transaction.date),
+                      DateFormat.yMMMd(Localizations.localeOf(context).languageCode)
+                          .format(transaction.date),
                       style: TextStyle(
                         fontSize: 14,
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -186,7 +215,7 @@ class TransactionListItem extends StatelessWidget {
                 children: [
                   Text(
                     NumberFormat.currency(
-                      locale: 'en_US',
+                      locale: Localizations.localeOf(context).toString(),
                       symbol: '\$',
                     ).format(transaction.amount),
                     style: TextStyle(
@@ -211,6 +240,13 @@ class TransactionListItem extends StatelessWidget {
               _DeleteButton(onDelete: () async {
                 if (await _showDeleteConfirmation(context)) {
                   onDelete?.call();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.transactionDeleted),
+                      backgroundColor: Colors.green,
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
                 }
               }),
             ],
