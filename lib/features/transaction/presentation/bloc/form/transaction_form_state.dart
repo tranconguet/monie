@@ -6,6 +6,7 @@ class TransactionFormState with _$TransactionFormState {
     required String amount,
     required TransactionType type,
     required DateTime date,
+    String note,
     String? error,
   }) = _TransactionFormState;
 

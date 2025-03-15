@@ -23,7 +23,7 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       date: fields[3] as DateTime,
       type: fields[4] as TransactionType,
       category: fields[5] as String?,
-      note: fields[6] as String?,
+      description: fields[6] as String,
       createdAt: fields[7] as DateTime,
     );
   }
@@ -45,7 +45,7 @@ class TransactionModelAdapter extends TypeAdapter<TransactionModel> {
       ..writeByte(5)
       ..write(obj.category)
       ..writeByte(6)
-      ..write(obj.note)
+      ..write(obj.description)
       ..writeByte(7)
       ..write(obj.createdAt);
   }

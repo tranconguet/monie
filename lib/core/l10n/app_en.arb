@@ -45,5 +45,6 @@
   "invalidAmount": "Invalid amount",
   "invalidDate": "Invalid date",
   "required": "Required",
-  "loadingTransactions": "Loading transactions..."
+  "loadingTransactions": "Loading transactions...",
+  "descriptionHint": "Enter transaction details"
 } 

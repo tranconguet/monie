@@ -45,5 +45,6 @@
   "invalidAmount": "Số tiền không hợp lệ",
   "invalidDate": "Ngày không hợp lệ",
   "required": "Bắt buộc",
-  "loadingTransactions": "Đang tải giao dịch..."
+  "loadingTransactions": "Đang tải giao dịch...",
+  "descriptionHint": "Nhập chi tiết giao dịch"
 } 

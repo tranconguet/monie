@@ -144,4 +144,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get loadingTransactions => 'Đang tải giao dịch...';
+
+  @override
+  String get descriptionHint => 'Nhập chi tiết giao dịch';
 }

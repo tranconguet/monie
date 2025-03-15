@@ -374,6 +374,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading transactions...'**
   String get loadingTransactions;
+
+  /// No description provided for @descriptionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter transaction details'**
+  String get descriptionHint;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -1,6 +1,5 @@
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:money_manager/features/transaction/presentation/bloc/transaction_bloc.dart';
 import 'package:uuid/uuid.dart';
@@ -9,8 +8,35 @@ import '../../../domain/entities/transaction_type.dart';
 import '../../../domain/repositories/transaction_repository.dart';
 
 part 'transaction_form_bloc.freezed.dart';
-part 'transaction_form_event.dart';
-part 'transaction_form_state.dart';
+
+// Events
+@freezed
+class TransactionFormEvent with _$TransactionFormEvent {
+  const factory TransactionFormEvent.amountChanged(String amount) = AmountChanged;
+  const factory TransactionFormEvent.typeChanged(TransactionType type) = TypeChanged;
+  const factory TransactionFormEvent.dateChanged(DateTime date) = DateChanged;
+  const factory TransactionFormEvent.noteChanged(String description) = NoteChanged;
+  const factory TransactionFormEvent.submitted() = Submitted;
+}
+
+// State
+@freezed
+class TransactionFormState with _$TransactionFormState {
+  const factory TransactionFormState({
+    required String amount,
+    required TransactionType type,
+    required DateTime date,
+    String? description,
+    String? error,
+  }) = _TransactionFormState;
+
+  factory TransactionFormState.initial() => TransactionFormState(
+        amount: '',
+        description: '',
+        type: TransactionType.expense,
+        date: DateTime.now(),
+      );
+}
 
 @singleton
 class TransactionFormBloc extends Bloc<TransactionFormEvent, TransactionFormState> {
@@ -22,14 +48,17 @@ class TransactionFormBloc extends Bloc<TransactionFormEvent, TransactionFormStat
       : super(TransactionFormState.initial()) {
     on<TransactionFormEvent>((event, emit) async {
       await event.when(
-        amountChanged: (String value) {
-          emit(state.copyWith(amount: value));
+        amountChanged: (amount) {
+          emit(state.copyWith(amount: amount));
         },
-        typeChanged: (TransactionType type) {
+        typeChanged: (type) {
           emit(state.copyWith(type: type));
         },
-        dateChanged: (DateTime date) {
+        dateChanged: (date) {
           emit(state.copyWith(date: date));
+        },
+        noteChanged: (description) {
+          emit(state.copyWith(description: description));
         },
         submitted: () async {
           final double? amount = double.tryParse(state.amount);
@@ -38,13 +67,19 @@ class TransactionFormBloc extends Bloc<TransactionFormEvent, TransactionFormStat
             return;
           }
 
+          if (state.description == null || state.description!.trim().isEmpty) {
+            emit(state.copyWith(error: 'Description is required'));
+            return;
+          }
+
           print('TransactionFormBloc - Submitting transaction');
           final transaction = Transaction(
             id: _uuid.v4(),
             title: state.type == TransactionType.income ? 'Income' : 'Expense',
-            amount: amount!,
+            amount: amount,
             date: state.date,
             type: state.type,
+            description: state.description ?? '',
             createdAt: DateTime.now(),
           );
 

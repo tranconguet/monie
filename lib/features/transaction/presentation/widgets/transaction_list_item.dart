@@ -191,7 +191,7 @@ class TransactionListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      transaction.title,
+                      transaction.description,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,

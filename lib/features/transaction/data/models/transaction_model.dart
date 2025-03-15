@@ -26,7 +26,7 @@ class TransactionModel extends HiveObject {
   final String? category;
   
   @HiveField(6)
-  final String? note;
+  final String description;
 
   @HiveField(7)
   final DateTime createdAt;
@@ -38,7 +38,7 @@ class TransactionModel extends HiveObject {
     required this.date,
     required this.type,
     this.category,
-    this.note,
+    required this.description,
     required this.createdAt,
   });
 
@@ -49,7 +49,7 @@ class TransactionModel extends HiveObject {
     date: DateTime.parse(json['date'] as String),
     type: TransactionType.values[json['type'] as int],
     category: json['category'] as String?,
-    note: json['note'] as String?,
+    description: json['description'] as String,
     createdAt: DateTime.parse(json['createdAt'] as String),
   );
 
@@ -60,7 +60,7 @@ class TransactionModel extends HiveObject {
     'date': date.toIso8601String(),
     'type': type.index,
     'category': category,
-    'note': note,
+    'description': description,
     'createdAt': createdAt.toIso8601String(),
   };
 
@@ -72,7 +72,7 @@ class TransactionModel extends HiveObject {
       date: transaction.date,
       type: transaction.type,
       category: transaction.category,
-      note: transaction.note,
+      description: transaction.description,
       createdAt: transaction.createdAt,
     );
   }
@@ -85,11 +85,11 @@ class TransactionModel extends HiveObject {
       date: date,
       type: type,
       category: category,
-      note: note,
+      description: description,
       createdAt: createdAt,
     );
   }
 
   @override
-  List<Object?> get props => [id, title, amount, date, type, category, note, createdAt];
+  List<Object?> get props => [id, title, amount, date, type, category, description, createdAt];
 }

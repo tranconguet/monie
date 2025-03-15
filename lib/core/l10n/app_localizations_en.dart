@@ -144,4 +144,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadingTransactions => 'Loading transactions...';
+
+  @override
+  String get descriptionHint => 'Enter transaction details';
 }

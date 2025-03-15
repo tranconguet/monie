@@ -21,6 +21,7 @@ mixin _$TransactionFormEvent {
     required TResult Function(String amount) amountChanged,
     required TResult Function(TransactionType type) typeChanged,
     required TResult Function(DateTime date) dateChanged,
+    required TResult Function(String description) noteChanged,
     required TResult Function() submitted,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,6 +30,7 @@ mixin _$TransactionFormEvent {
     TResult? Function(String amount)? amountChanged,
     TResult? Function(TransactionType type)? typeChanged,
     TResult? Function(DateTime date)? dateChanged,
+    TResult? Function(String description)? noteChanged,
     TResult? Function()? submitted,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,32 +39,36 @@ mixin _$TransactionFormEvent {
     TResult Function(String amount)? amountChanged,
     TResult Function(TransactionType type)? typeChanged,
     TResult Function(DateTime date)? dateChanged,
+    TResult Function(String description)? noteChanged,
     TResult Function()? submitted,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_AmountChanged value) amountChanged,
-    required TResult Function(_TypeChanged value) typeChanged,
-    required TResult Function(_DateChanged value) dateChanged,
-    required TResult Function(_Submitted value) submitted,
+    required TResult Function(AmountChanged value) amountChanged,
+    required TResult Function(TypeChanged value) typeChanged,
+    required TResult Function(DateChanged value) dateChanged,
+    required TResult Function(NoteChanged value) noteChanged,
+    required TResult Function(Submitted value) submitted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_AmountChanged value)? amountChanged,
-    TResult? Function(_TypeChanged value)? typeChanged,
-    TResult? Function(_DateChanged value)? dateChanged,
-    TResult? Function(_Submitted value)? submitted,
+    TResult? Function(AmountChanged value)? amountChanged,
+    TResult? Function(TypeChanged value)? typeChanged,
+    TResult? Function(DateChanged value)? dateChanged,
+    TResult? Function(NoteChanged value)? noteChanged,
+    TResult? Function(Submitted value)? submitted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_AmountChanged value)? amountChanged,
-    TResult Function(_TypeChanged value)? typeChanged,
-    TResult Function(_DateChanged value)? dateChanged,
-    TResult Function(_Submitted value)? submitted,
+    TResult Function(AmountChanged value)? amountChanged,
+    TResult Function(TypeChanged value)? typeChanged,
+    TResult Function(DateChanged value)? dateChanged,
+    TResult Function(NoteChanged value)? noteChanged,
+    TResult Function(Submitted value)? submitted,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -88,20 +94,20 @@ class _$TransactionFormEventCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$_AmountChangedCopyWith<$Res> {
-  factory _$$_AmountChangedCopyWith(
-          _$_AmountChanged value, $Res Function(_$_AmountChanged) then) =
-      __$$_AmountChangedCopyWithImpl<$Res>;
+abstract class _$$AmountChangedCopyWith<$Res> {
+  factory _$$AmountChangedCopyWith(
+          _$AmountChanged value, $Res Function(_$AmountChanged) then) =
+      __$$AmountChangedCopyWithImpl<$Res>;
   @useResult
   $Res call({String amount});
 }
 
 /// @nodoc
-class __$$_AmountChangedCopyWithImpl<$Res>
-    extends _$TransactionFormEventCopyWithImpl<$Res, _$_AmountChanged>
-    implements _$$_AmountChangedCopyWith<$Res> {
-  __$$_AmountChangedCopyWithImpl(
-      _$_AmountChanged _value, $Res Function(_$_AmountChanged) _then)
+class __$$AmountChangedCopyWithImpl<$Res>
+    extends _$TransactionFormEventCopyWithImpl<$Res, _$AmountChanged>
+    implements _$$AmountChangedCopyWith<$Res> {
+  __$$AmountChangedCopyWithImpl(
+      _$AmountChanged _value, $Res Function(_$AmountChanged) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -109,7 +115,7 @@ class __$$_AmountChangedCopyWithImpl<$Res>
   $Res call({
     Object? amount = null,
   }) {
-    return _then(_$_AmountChanged(
+    return _then(_$AmountChanged(
       null == amount
           ? _value.amount
           : amount // ignore: cast_nullable_to_non_nullable
@@ -120,8 +126,8 @@ class __$$_AmountChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AmountChanged implements _AmountChanged {
-  const _$_AmountChanged(this.amount);
+class _$AmountChanged implements AmountChanged {
+  const _$AmountChanged(this.amount);
 
   @override
   final String amount;
@@ -135,7 +141,7 @@ class _$_AmountChanged implements _AmountChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_AmountChanged &&
+            other is _$AmountChanged &&
             (identical(other.amount, amount) || other.amount == amount));
   }
 
@@ -145,8 +151,8 @@ class _$_AmountChanged implements _AmountChanged {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_AmountChangedCopyWith<_$_AmountChanged> get copyWith =>
-      __$$_AmountChangedCopyWithImpl<_$_AmountChanged>(this, _$identity);
+  _$$AmountChangedCopyWith<_$AmountChanged> get copyWith =>
+      __$$AmountChangedCopyWithImpl<_$AmountChanged>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -154,6 +160,7 @@ class _$_AmountChanged implements _AmountChanged {
     required TResult Function(String amount) amountChanged,
     required TResult Function(TransactionType type) typeChanged,
     required TResult Function(DateTime date) dateChanged,
+    required TResult Function(String description) noteChanged,
     required TResult Function() submitted,
   }) {
     return amountChanged(amount);
@@ -165,6 +172,7 @@ class _$_AmountChanged implements _AmountChanged {
     TResult? Function(String amount)? amountChanged,
     TResult? Function(TransactionType type)? typeChanged,
     TResult? Function(DateTime date)? dateChanged,
+    TResult? Function(String description)? noteChanged,
     TResult? Function()? submitted,
   }) {
     return amountChanged?.call(amount);
@@ -176,6 +184,7 @@ class _$_AmountChanged implements _AmountChanged {
     TResult Function(String amount)? amountChanged,
     TResult Function(TransactionType type)? typeChanged,
     TResult Function(DateTime date)? dateChanged,
+    TResult Function(String description)? noteChanged,
     TResult Function()? submitted,
     required TResult orElse(),
   }) {
@@ -188,10 +197,11 @@ class _$_AmountChanged implements _AmountChanged {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_AmountChanged value) amountChanged,
-    required TResult Function(_TypeChanged value) typeChanged,
-    required TResult Function(_DateChanged value) dateChanged,
-    required TResult Function(_Submitted value) submitted,
+    required TResult Function(AmountChanged value) amountChanged,
+    required TResult Function(TypeChanged value) typeChanged,
+    required TResult Function(DateChanged value) dateChanged,
+    required TResult Function(NoteChanged value) noteChanged,
+    required TResult Function(Submitted value) submitted,
   }) {
     return amountChanged(this);
   }
@@ -199,10 +209,11 @@ class _$_AmountChanged implements _AmountChanged {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_AmountChanged value)? amountChanged,
-    TResult? Function(_TypeChanged value)? typeChanged,
-    TResult? Function(_DateChanged value)? dateChanged,
-    TResult? Function(_Submitted value)? submitted,
+    TResult? Function(AmountChanged value)? amountChanged,
+    TResult? Function(TypeChanged value)? typeChanged,
+    TResult? Function(DateChanged value)? dateChanged,
+    TResult? Function(NoteChanged value)? noteChanged,
+    TResult? Function(Submitted value)? submitted,
   }) {
     return amountChanged?.call(this);
   }
@@ -210,10 +221,11 @@ class _$_AmountChanged implements _AmountChanged {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_AmountChanged value)? amountChanged,
-    TResult Function(_TypeChanged value)? typeChanged,
-    TResult Function(_DateChanged value)? dateChanged,
-    TResult Function(_Submitted value)? submitted,
+    TResult Function(AmountChanged value)? amountChanged,
+    TResult Function(TypeChanged value)? typeChanged,
+    TResult Function(DateChanged value)? dateChanged,
+    TResult Function(NoteChanged value)? noteChanged,
+    TResult Function(Submitted value)? submitted,
     required TResult orElse(),
   }) {
     if (amountChanged != null) {
@@ -223,30 +235,30 @@ class _$_AmountChanged implements _AmountChanged {
   }
 }
 
-abstract class _AmountChanged implements TransactionFormEvent {
-  const factory _AmountChanged(final String amount) = _$_AmountChanged;
+abstract class AmountChanged implements TransactionFormEvent {
+  const factory AmountChanged(final String amount) = _$AmountChanged;
 
   String get amount;
   @JsonKey(ignore: true)
-  _$$_AmountChangedCopyWith<_$_AmountChanged> get copyWith =>
+  _$$AmountChangedCopyWith<_$AmountChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_TypeChangedCopyWith<$Res> {
-  factory _$$_TypeChangedCopyWith(
-          _$_TypeChanged value, $Res Function(_$_TypeChanged) then) =
-      __$$_TypeChangedCopyWithImpl<$Res>;
+abstract class _$$TypeChangedCopyWith<$Res> {
+  factory _$$TypeChangedCopyWith(
+          _$TypeChanged value, $Res Function(_$TypeChanged) then) =
+      __$$TypeChangedCopyWithImpl<$Res>;
   @useResult
   $Res call({TransactionType type});
 }
 
 /// @nodoc
-class __$$_TypeChangedCopyWithImpl<$Res>
-    extends _$TransactionFormEventCopyWithImpl<$Res, _$_TypeChanged>
-    implements _$$_TypeChangedCopyWith<$Res> {
-  __$$_TypeChangedCopyWithImpl(
-      _$_TypeChanged _value, $Res Function(_$_TypeChanged) _then)
+class __$$TypeChangedCopyWithImpl<$Res>
+    extends _$TransactionFormEventCopyWithImpl<$Res, _$TypeChanged>
+    implements _$$TypeChangedCopyWith<$Res> {
+  __$$TypeChangedCopyWithImpl(
+      _$TypeChanged _value, $Res Function(_$TypeChanged) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -254,7 +266,7 @@ class __$$_TypeChangedCopyWithImpl<$Res>
   $Res call({
     Object? type = null,
   }) {
-    return _then(_$_TypeChanged(
+    return _then(_$TypeChanged(
       null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -265,8 +277,8 @@ class __$$_TypeChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_TypeChanged implements _TypeChanged {
-  const _$_TypeChanged(this.type);
+class _$TypeChanged implements TypeChanged {
+  const _$TypeChanged(this.type);
 
   @override
   final TransactionType type;
@@ -280,7 +292,7 @@ class _$_TypeChanged implements _TypeChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_TypeChanged &&
+            other is _$TypeChanged &&
             (identical(other.type, type) || other.type == type));
   }
 
@@ -290,8 +302,8 @@ class _$_TypeChanged implements _TypeChanged {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_TypeChangedCopyWith<_$_TypeChanged> get copyWith =>
-      __$$_TypeChangedCopyWithImpl<_$_TypeChanged>(this, _$identity);
+  _$$TypeChangedCopyWith<_$TypeChanged> get copyWith =>
+      __$$TypeChangedCopyWithImpl<_$TypeChanged>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -299,6 +311,7 @@ class _$_TypeChanged implements _TypeChanged {
     required TResult Function(String amount) amountChanged,
     required TResult Function(TransactionType type) typeChanged,
     required TResult Function(DateTime date) dateChanged,
+    required TResult Function(String description) noteChanged,
     required TResult Function() submitted,
   }) {
     return typeChanged(type);
@@ -310,6 +323,7 @@ class _$_TypeChanged implements _TypeChanged {
     TResult? Function(String amount)? amountChanged,
     TResult? Function(TransactionType type)? typeChanged,
     TResult? Function(DateTime date)? dateChanged,
+    TResult? Function(String description)? noteChanged,
     TResult? Function()? submitted,
   }) {
     return typeChanged?.call(type);
@@ -321,6 +335,7 @@ class _$_TypeChanged implements _TypeChanged {
     TResult Function(String amount)? amountChanged,
     TResult Function(TransactionType type)? typeChanged,
     TResult Function(DateTime date)? dateChanged,
+    TResult Function(String description)? noteChanged,
     TResult Function()? submitted,
     required TResult orElse(),
   }) {
@@ -333,10 +348,11 @@ class _$_TypeChanged implements _TypeChanged {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_AmountChanged value) amountChanged,
-    required TResult Function(_TypeChanged value) typeChanged,
-    required TResult Function(_DateChanged value) dateChanged,
-    required TResult Function(_Submitted value) submitted,
+    required TResult Function(AmountChanged value) amountChanged,
+    required TResult Function(TypeChanged value) typeChanged,
+    required TResult Function(DateChanged value) dateChanged,
+    required TResult Function(NoteChanged value) noteChanged,
+    required TResult Function(Submitted value) submitted,
   }) {
     return typeChanged(this);
   }
@@ -344,10 +360,11 @@ class _$_TypeChanged implements _TypeChanged {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_AmountChanged value)? amountChanged,
-    TResult? Function(_TypeChanged value)? typeChanged,
-    TResult? Function(_DateChanged value)? dateChanged,
-    TResult? Function(_Submitted value)? submitted,
+    TResult? Function(AmountChanged value)? amountChanged,
+    TResult? Function(TypeChanged value)? typeChanged,
+    TResult? Function(DateChanged value)? dateChanged,
+    TResult? Function(NoteChanged value)? noteChanged,
+    TResult? Function(Submitted value)? submitted,
   }) {
     return typeChanged?.call(this);
   }
@@ -355,10 +372,11 @@ class _$_TypeChanged implements _TypeChanged {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_AmountChanged value)? amountChanged,
-    TResult Function(_TypeChanged value)? typeChanged,
-    TResult Function(_DateChanged value)? dateChanged,
-    TResult Function(_Submitted value)? submitted,
+    TResult Function(AmountChanged value)? amountChanged,
+    TResult Function(TypeChanged value)? typeChanged,
+    TResult Function(DateChanged value)? dateChanged,
+    TResult Function(NoteChanged value)? noteChanged,
+    TResult Function(Submitted value)? submitted,
     required TResult orElse(),
   }) {
     if (typeChanged != null) {
@@ -368,30 +386,30 @@ class _$_TypeChanged implements _TypeChanged {
   }
 }
 
-abstract class _TypeChanged implements TransactionFormEvent {
-  const factory _TypeChanged(final TransactionType type) = _$_TypeChanged;
+abstract class TypeChanged implements TransactionFormEvent {
+  const factory TypeChanged(final TransactionType type) = _$TypeChanged;
 
   TransactionType get type;
   @JsonKey(ignore: true)
-  _$$_TypeChangedCopyWith<_$_TypeChanged> get copyWith =>
+  _$$TypeChangedCopyWith<_$TypeChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_DateChangedCopyWith<$Res> {
-  factory _$$_DateChangedCopyWith(
-          _$_DateChanged value, $Res Function(_$_DateChanged) then) =
-      __$$_DateChangedCopyWithImpl<$Res>;
+abstract class _$$DateChangedCopyWith<$Res> {
+  factory _$$DateChangedCopyWith(
+          _$DateChanged value, $Res Function(_$DateChanged) then) =
+      __$$DateChangedCopyWithImpl<$Res>;
   @useResult
   $Res call({DateTime date});
 }
 
 /// @nodoc
-class __$$_DateChangedCopyWithImpl<$Res>
-    extends _$TransactionFormEventCopyWithImpl<$Res, _$_DateChanged>
-    implements _$$_DateChangedCopyWith<$Res> {
-  __$$_DateChangedCopyWithImpl(
-      _$_DateChanged _value, $Res Function(_$_DateChanged) _then)
+class __$$DateChangedCopyWithImpl<$Res>
+    extends _$TransactionFormEventCopyWithImpl<$Res, _$DateChanged>
+    implements _$$DateChangedCopyWith<$Res> {
+  __$$DateChangedCopyWithImpl(
+      _$DateChanged _value, $Res Function(_$DateChanged) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -399,7 +417,7 @@ class __$$_DateChangedCopyWithImpl<$Res>
   $Res call({
     Object? date = null,
   }) {
-    return _then(_$_DateChanged(
+    return _then(_$DateChanged(
       null == date
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
@@ -410,8 +428,8 @@ class __$$_DateChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_DateChanged implements _DateChanged {
-  const _$_DateChanged(this.date);
+class _$DateChanged implements DateChanged {
+  const _$DateChanged(this.date);
 
   @override
   final DateTime date;
@@ -425,7 +443,7 @@ class _$_DateChanged implements _DateChanged {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_DateChanged &&
+            other is _$DateChanged &&
             (identical(other.date, date) || other.date == date));
   }
 
@@ -435,8 +453,8 @@ class _$_DateChanged implements _DateChanged {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_DateChangedCopyWith<_$_DateChanged> get copyWith =>
-      __$$_DateChangedCopyWithImpl<_$_DateChanged>(this, _$identity);
+  _$$DateChangedCopyWith<_$DateChanged> get copyWith =>
+      __$$DateChangedCopyWithImpl<_$DateChanged>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -444,6 +462,7 @@ class _$_DateChanged implements _DateChanged {
     required TResult Function(String amount) amountChanged,
     required TResult Function(TransactionType type) typeChanged,
     required TResult Function(DateTime date) dateChanged,
+    required TResult Function(String description) noteChanged,
     required TResult Function() submitted,
   }) {
     return dateChanged(date);
@@ -455,6 +474,7 @@ class _$_DateChanged implements _DateChanged {
     TResult? Function(String amount)? amountChanged,
     TResult? Function(TransactionType type)? typeChanged,
     TResult? Function(DateTime date)? dateChanged,
+    TResult? Function(String description)? noteChanged,
     TResult? Function()? submitted,
   }) {
     return dateChanged?.call(date);
@@ -466,6 +486,7 @@ class _$_DateChanged implements _DateChanged {
     TResult Function(String amount)? amountChanged,
     TResult Function(TransactionType type)? typeChanged,
     TResult Function(DateTime date)? dateChanged,
+    TResult Function(String description)? noteChanged,
     TResult Function()? submitted,
     required TResult orElse(),
   }) {
@@ -478,10 +499,11 @@ class _$_DateChanged implements _DateChanged {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_AmountChanged value) amountChanged,
-    required TResult Function(_TypeChanged value) typeChanged,
-    required TResult Function(_DateChanged value) dateChanged,
-    required TResult Function(_Submitted value) submitted,
+    required TResult Function(AmountChanged value) amountChanged,
+    required TResult Function(TypeChanged value) typeChanged,
+    required TResult Function(DateChanged value) dateChanged,
+    required TResult Function(NoteChanged value) noteChanged,
+    required TResult Function(Submitted value) submitted,
   }) {
     return dateChanged(this);
   }
@@ -489,10 +511,11 @@ class _$_DateChanged implements _DateChanged {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_AmountChanged value)? amountChanged,
-    TResult? Function(_TypeChanged value)? typeChanged,
-    TResult? Function(_DateChanged value)? dateChanged,
-    TResult? Function(_Submitted value)? submitted,
+    TResult? Function(AmountChanged value)? amountChanged,
+    TResult? Function(TypeChanged value)? typeChanged,
+    TResult? Function(DateChanged value)? dateChanged,
+    TResult? Function(NoteChanged value)? noteChanged,
+    TResult? Function(Submitted value)? submitted,
   }) {
     return dateChanged?.call(this);
   }
@@ -500,10 +523,11 @@ class _$_DateChanged implements _DateChanged {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_AmountChanged value)? amountChanged,
-    TResult Function(_TypeChanged value)? typeChanged,
-    TResult Function(_DateChanged value)? dateChanged,
-    TResult Function(_Submitted value)? submitted,
+    TResult Function(AmountChanged value)? amountChanged,
+    TResult Function(TypeChanged value)? typeChanged,
+    TResult Function(DateChanged value)? dateChanged,
+    TResult Function(NoteChanged value)? noteChanged,
+    TResult Function(Submitted value)? submitted,
     required TResult orElse(),
   }) {
     if (dateChanged != null) {
@@ -513,35 +537,187 @@ class _$_DateChanged implements _DateChanged {
   }
 }
 
-abstract class _DateChanged implements TransactionFormEvent {
-  const factory _DateChanged(final DateTime date) = _$_DateChanged;
+abstract class DateChanged implements TransactionFormEvent {
+  const factory DateChanged(final DateTime date) = _$DateChanged;
 
   DateTime get date;
   @JsonKey(ignore: true)
-  _$$_DateChangedCopyWith<_$_DateChanged> get copyWith =>
+  _$$DateChangedCopyWith<_$DateChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$_SubmittedCopyWith<$Res> {
-  factory _$$_SubmittedCopyWith(
-          _$_Submitted value, $Res Function(_$_Submitted) then) =
-      __$$_SubmittedCopyWithImpl<$Res>;
+abstract class _$$NoteChangedCopyWith<$Res> {
+  factory _$$NoteChangedCopyWith(
+          _$NoteChanged value, $Res Function(_$NoteChanged) then) =
+      __$$NoteChangedCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String description});
 }
 
 /// @nodoc
-class __$$_SubmittedCopyWithImpl<$Res>
-    extends _$TransactionFormEventCopyWithImpl<$Res, _$_Submitted>
-    implements _$$_SubmittedCopyWith<$Res> {
-  __$$_SubmittedCopyWithImpl(
-      _$_Submitted _value, $Res Function(_$_Submitted) _then)
+class __$$NoteChangedCopyWithImpl<$Res>
+    extends _$TransactionFormEventCopyWithImpl<$Res, _$NoteChanged>
+    implements _$$NoteChangedCopyWith<$Res> {
+  __$$NoteChangedCopyWithImpl(
+      _$NoteChanged _value, $Res Function(_$NoteChanged) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? description = null,
+  }) {
+    return _then(_$NoteChanged(
+      null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NoteChanged implements NoteChanged {
+  const _$NoteChanged(this.description);
+
+  @override
+  final String description;
+
+  @override
+  String toString() {
+    return 'TransactionFormEvent.noteChanged(description: $description)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NoteChanged &&
+            (identical(other.description, description) ||
+                other.description == description));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, description);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NoteChangedCopyWith<_$NoteChanged> get copyWith =>
+      __$$NoteChangedCopyWithImpl<_$NoteChanged>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String amount) amountChanged,
+    required TResult Function(TransactionType type) typeChanged,
+    required TResult Function(DateTime date) dateChanged,
+    required TResult Function(String description) noteChanged,
+    required TResult Function() submitted,
+  }) {
+    return noteChanged(description);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String amount)? amountChanged,
+    TResult? Function(TransactionType type)? typeChanged,
+    TResult? Function(DateTime date)? dateChanged,
+    TResult? Function(String description)? noteChanged,
+    TResult? Function()? submitted,
+  }) {
+    return noteChanged?.call(description);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String amount)? amountChanged,
+    TResult Function(TransactionType type)? typeChanged,
+    TResult Function(DateTime date)? dateChanged,
+    TResult Function(String description)? noteChanged,
+    TResult Function()? submitted,
+    required TResult orElse(),
+  }) {
+    if (noteChanged != null) {
+      return noteChanged(description);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(AmountChanged value) amountChanged,
+    required TResult Function(TypeChanged value) typeChanged,
+    required TResult Function(DateChanged value) dateChanged,
+    required TResult Function(NoteChanged value) noteChanged,
+    required TResult Function(Submitted value) submitted,
+  }) {
+    return noteChanged(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(AmountChanged value)? amountChanged,
+    TResult? Function(TypeChanged value)? typeChanged,
+    TResult? Function(DateChanged value)? dateChanged,
+    TResult? Function(NoteChanged value)? noteChanged,
+    TResult? Function(Submitted value)? submitted,
+  }) {
+    return noteChanged?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(AmountChanged value)? amountChanged,
+    TResult Function(TypeChanged value)? typeChanged,
+    TResult Function(DateChanged value)? dateChanged,
+    TResult Function(NoteChanged value)? noteChanged,
+    TResult Function(Submitted value)? submitted,
+    required TResult orElse(),
+  }) {
+    if (noteChanged != null) {
+      return noteChanged(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NoteChanged implements TransactionFormEvent {
+  const factory NoteChanged(final String description) = _$NoteChanged;
+
+  String get description;
+  @JsonKey(ignore: true)
+  _$$NoteChangedCopyWith<_$NoteChanged> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SubmittedCopyWith<$Res> {
+  factory _$$SubmittedCopyWith(
+          _$Submitted value, $Res Function(_$Submitted) then) =
+      __$$SubmittedCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$SubmittedCopyWithImpl<$Res>
+    extends _$TransactionFormEventCopyWithImpl<$Res, _$Submitted>
+    implements _$$SubmittedCopyWith<$Res> {
+  __$$SubmittedCopyWithImpl(
+      _$Submitted _value, $Res Function(_$Submitted) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$_Submitted implements _Submitted {
-  const _$_Submitted();
+class _$Submitted implements Submitted {
+  const _$Submitted();
 
   @override
   String toString() {
@@ -551,7 +727,7 @@ class _$_Submitted implements _Submitted {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$_Submitted);
+        (other.runtimeType == runtimeType && other is _$Submitted);
   }
 
   @override
@@ -563,6 +739,7 @@ class _$_Submitted implements _Submitted {
     required TResult Function(String amount) amountChanged,
     required TResult Function(TransactionType type) typeChanged,
     required TResult Function(DateTime date) dateChanged,
+    required TResult Function(String description) noteChanged,
     required TResult Function() submitted,
   }) {
     return submitted();
@@ -574,6 +751,7 @@ class _$_Submitted implements _Submitted {
     TResult? Function(String amount)? amountChanged,
     TResult? Function(TransactionType type)? typeChanged,
     TResult? Function(DateTime date)? dateChanged,
+    TResult? Function(String description)? noteChanged,
     TResult? Function()? submitted,
   }) {
     return submitted?.call();
@@ -585,6 +763,7 @@ class _$_Submitted implements _Submitted {
     TResult Function(String amount)? amountChanged,
     TResult Function(TransactionType type)? typeChanged,
     TResult Function(DateTime date)? dateChanged,
+    TResult Function(String description)? noteChanged,
     TResult Function()? submitted,
     required TResult orElse(),
   }) {
@@ -597,10 +776,11 @@ class _$_Submitted implements _Submitted {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_AmountChanged value) amountChanged,
-    required TResult Function(_TypeChanged value) typeChanged,
-    required TResult Function(_DateChanged value) dateChanged,
-    required TResult Function(_Submitted value) submitted,
+    required TResult Function(AmountChanged value) amountChanged,
+    required TResult Function(TypeChanged value) typeChanged,
+    required TResult Function(DateChanged value) dateChanged,
+    required TResult Function(NoteChanged value) noteChanged,
+    required TResult Function(Submitted value) submitted,
   }) {
     return submitted(this);
   }
@@ -608,10 +788,11 @@ class _$_Submitted implements _Submitted {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_AmountChanged value)? amountChanged,
-    TResult? Function(_TypeChanged value)? typeChanged,
-    TResult? Function(_DateChanged value)? dateChanged,
-    TResult? Function(_Submitted value)? submitted,
+    TResult? Function(AmountChanged value)? amountChanged,
+    TResult? Function(TypeChanged value)? typeChanged,
+    TResult? Function(DateChanged value)? dateChanged,
+    TResult? Function(NoteChanged value)? noteChanged,
+    TResult? Function(Submitted value)? submitted,
   }) {
     return submitted?.call(this);
   }
@@ -619,10 +800,11 @@ class _$_Submitted implements _Submitted {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_AmountChanged value)? amountChanged,
-    TResult Function(_TypeChanged value)? typeChanged,
-    TResult Function(_DateChanged value)? dateChanged,
-    TResult Function(_Submitted value)? submitted,
+    TResult Function(AmountChanged value)? amountChanged,
+    TResult Function(TypeChanged value)? typeChanged,
+    TResult Function(DateChanged value)? dateChanged,
+    TResult Function(NoteChanged value)? noteChanged,
+    TResult Function(Submitted value)? submitted,
     required TResult orElse(),
   }) {
     if (submitted != null) {
@@ -632,8 +814,8 @@ class _$_Submitted implements _Submitted {
   }
 }
 
-abstract class _Submitted implements TransactionFormEvent {
-  const factory _Submitted() = _$_Submitted;
+abstract class Submitted implements TransactionFormEvent {
+  const factory Submitted() = _$Submitted;
 }
 
 /// @nodoc
@@ -641,6 +823,7 @@ mixin _$TransactionFormState {
   String get amount => throw _privateConstructorUsedError;
   TransactionType get type => throw _privateConstructorUsedError;
   DateTime get date => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -655,7 +838,11 @@ abstract class $TransactionFormStateCopyWith<$Res> {
       _$TransactionFormStateCopyWithImpl<$Res, TransactionFormState>;
   @useResult
   $Res call(
-      {String amount, TransactionType type, DateTime date, String? error});
+      {String amount,
+      TransactionType type,
+      DateTime date,
+      String? description,
+      String? error});
 }
 
 /// @nodoc
@@ -675,6 +862,7 @@ class _$TransactionFormStateCopyWithImpl<$Res,
     Object? amount = null,
     Object? type = null,
     Object? date = null,
+    Object? description = freezed,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
@@ -690,6 +878,10 @@ class _$TransactionFormStateCopyWithImpl<$Res,
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -707,7 +899,11 @@ abstract class _$$_TransactionFormStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String amount, TransactionType type, DateTime date, String? error});
+      {String amount,
+      TransactionType type,
+      DateTime date,
+      String? description,
+      String? error});
 }
 
 /// @nodoc
@@ -724,6 +920,7 @@ class __$$_TransactionFormStateCopyWithImpl<$Res>
     Object? amount = null,
     Object? type = null,
     Object? date = null,
+    Object? description = freezed,
     Object? error = freezed,
   }) {
     return _then(_$_TransactionFormState(
@@ -739,6 +936,10 @@ class __$$_TransactionFormStateCopyWithImpl<$Res>
           ? _value.date
           : date // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -754,6 +955,7 @@ class _$_TransactionFormState implements _TransactionFormState {
       {required this.amount,
       required this.type,
       required this.date,
+      this.description,
       this.error});
 
   @override
@@ -763,11 +965,13 @@ class _$_TransactionFormState implements _TransactionFormState {
   @override
   final DateTime date;
   @override
+  final String? description;
+  @override
   final String? error;
 
   @override
   String toString() {
-    return 'TransactionFormState(amount: $amount, type: $type, date: $date, error: $error)';
+    return 'TransactionFormState(amount: $amount, type: $type, date: $date, description: $description, error: $error)';
   }
 
   @override
@@ -778,11 +982,14 @@ class _$_TransactionFormState implements _TransactionFormState {
             (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.type, type) || other.type == type) &&
             (identical(other.date, date) || other.date == date) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, amount, type, date, error);
+  int get hashCode =>
+      Object.hash(runtimeType, amount, type, date, description, error);
 
   @JsonKey(ignore: true)
   @override
@@ -797,6 +1004,7 @@ abstract class _TransactionFormState implements TransactionFormState {
       {required final String amount,
       required final TransactionType type,
       required final DateTime date,
+      final String? description,
       final String? error}) = _$_TransactionFormState;
 
   @override
@@ -805,6 +1013,8 @@ abstract class _TransactionFormState implements TransactionFormState {
   TransactionType get type;
   @override
   DateTime get date;
+  @override
+  String? get description;
   @override
   String? get error;
   @override
