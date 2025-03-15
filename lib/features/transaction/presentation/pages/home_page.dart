@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:money_manager/features/transaction/presentation/group_by_type.dart';
 import '../bloc/transaction_bloc.dart';
 import '../widgets/transaction_form.dart';
 import '../widgets/transaction_list.dart';
@@ -175,8 +176,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: DropdownButtonFormField<String>(
-                            value: 'type',
+                          child: DropdownButtonFormField<GroupByType>(
+                            value: GroupByType.type,
                             decoration: InputDecoration(
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -213,19 +214,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             borderRadius: BorderRadius.circular(6),
                             items: const [
                               DropdownMenuItem(
-                                value: 'type',
+                                value: GroupByType.type,
                                 child: Text('Type'),
                               ),
                               DropdownMenuItem(
-                                value: 'day',
+                                value: GroupByType.day,
                                 child: Text('Day'),
                               ),
                               DropdownMenuItem(
-                                value: 'month',
+                                value: GroupByType.month,
                                 child: Text('Month'),
                               ),
                               DropdownMenuItem(
-                                value: 'year',
+                                value: GroupByType.year,
                                 child: Text('Year'),
                               ),
                             ],
