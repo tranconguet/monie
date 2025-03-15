@@ -15,4 +15,4 @@ class GetTransactions implements UseCase<List<Transaction>, NoParams> {
   Future<Either<Failure, List<Transaction>>> call(NoParams params) {
     return _repository.getTransactions();
   }
-} 
+}

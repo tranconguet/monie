@@ -19,7 +19,9 @@ class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
 
   @override
   Future<List<TransactionModel>> getTransactions() async {
-    return _box.values.toList();
+    final transactions = _box.values.toList();
+    print('LocalDataSource - Retrieved ${transactions.length} transactions from Hive');
+    return transactions;
   }
 
   @override
@@ -29,7 +31,9 @@ class TransactionLocalDataSourceImpl implements TransactionLocalDataSource {
 
   @override
   Future<TransactionModel> createTransaction(TransactionModel transaction) async {
+    print('LocalDataSource - Saving transaction to Hive: ${transaction.id}');
     await _box.put(transaction.id, transaction);
+    print('LocalDataSource - Transaction saved successfully');
     return transaction;
   }
 

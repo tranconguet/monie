@@ -7,7 +7,7 @@ import '../../domain/repositories/transaction_repository.dart';
 import '../datasources/transaction_local_datasource.dart';
 import '../models/transaction_model.dart';
 
-@LazySingleton(as: TransactionRepository)
+@Injectable(as: TransactionRepository)
 class TransactionRepositoryImpl implements TransactionRepository {
   final TransactionLocalDataSource _localDataSource;
 
@@ -17,8 +17,10 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<Either<Failure, List<Transaction>>> getTransactions() async {
     try {
       final transactions = await _localDataSource.getTransactions();
+      print('Repository - Retrieved transactions: ${transactions.length}');
       return Right(transactions.map((model) => model.toEntity()).toList());
     } catch (e) {
+      print('Repository - Error getting transactions: $e');
       return Left(CacheFailure(message: e.toString()));
     }
   }
@@ -40,9 +42,12 @@ class TransactionRepositoryImpl implements TransactionRepository {
   Future<Either<Failure, Transaction>> createTransaction(Transaction transaction) async {
     try {
       final model = TransactionModel.fromEntity(transaction);
+      print('Repository - Creating transaction: ${model.id}');
       final createdTransaction = await _localDataSource.createTransaction(model);
+      print('Repository - Transaction created successfully');
       return Right(createdTransaction.toEntity());
     } catch (e) {
+      print('Repository - Error creating transaction: $e');
       return Left(CacheFailure(message: e.toString()));
     }
   }

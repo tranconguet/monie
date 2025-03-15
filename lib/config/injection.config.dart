@@ -16,6 +16,8 @@ import '../features/transaction/data/repositories/transaction_repository_impl.da
 import '../features/transaction/domain/repositories/transaction_repository.dart'
     as _i5;
 import '../features/transaction/domain/usecases/get_transactions.dart' as _i7;
+import '../features/transaction/presentation/bloc/form/transaction_form_bloc.dart'
+    as _i9;
 import '../features/transaction/presentation/bloc/transaction_bloc.dart'
     as _i8; // ignore_for_file: unnecessary_lambdas
 
@@ -35,12 +37,16 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i3.ApiClient>(() => _i3.ApiClient());
     gh.lazySingleton<_i4.TransactionLocalDataSource>(
         () => _i4.TransactionLocalDataSourceImpl());
-    gh.lazySingleton<_i5.TransactionRepository>(() =>
+    gh.factory<_i5.TransactionRepository>(() =>
         _i6.TransactionRepositoryImpl(get<_i4.TransactionLocalDataSource>()));
     gh.factory<_i7.GetTransactions>(
         () => _i7.GetTransactions(get<_i5.TransactionRepository>()));
-    gh.factory<_i8.TransactionBloc>(
-        () => _i8.TransactionBloc(get<_i7.GetTransactions>()));
+    gh.singleton<_i8.TransactionBloc>(
+        _i8.TransactionBloc(get<_i7.GetTransactions>()));
+    gh.singleton<_i9.TransactionFormBloc>(_i9.TransactionFormBloc(
+      get<_i5.TransactionRepository>(),
+      get<_i8.TransactionBloc>(),
+    ));
     return this;
   }
 }
