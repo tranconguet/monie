@@ -23,16 +23,31 @@ class AppTheme {
       onBackground: Colors.grey[900]!,
       onSurface: Colors.grey[900]!,
     ),
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       elevation: 0,
       centerTitle: true,
-      backgroundColor: primaryDarkColor,
+      scrolledUnderElevation: 0,
+      backgroundColor: Colors.transparent,
       foregroundColor: Colors.white,
-      systemOverlayStyle: SystemUiOverlayStyle.light,
-      titleTextStyle: TextStyle(
+      systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarIconBrightness: Brightness.light,
+      ),
+      titleTextStyle: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w600,
         color: Colors.white,
+      ),
+      iconTheme: const IconThemeData(
+        color: Colors.white,
+        size: 24,
+      ),
+      actionsIconTheme: const IconThemeData(
+        color: Colors.white,
+        size: 24,
       ),
     ),
     cardTheme: CardTheme(

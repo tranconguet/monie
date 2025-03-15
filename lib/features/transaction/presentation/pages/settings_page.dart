@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,79 +15,48 @@ class SettingsPage extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Row(
-            children: const [
+            children: [
               Icon(
-                Icons.warning_rounded,
-                color: Color(0xFFE53935),
+                Icons.warning_amber_rounded,
+                color: Theme.of(context).colorScheme.error,
                 size: 24,
               ),
-              SizedBox(width: 12),
-              Text(
-                'Clear All Data',
-                style: TextStyle(
-                  color: Color(0xFF424242),
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              const SizedBox(width: 12),
+              const Text('Clear All Data'),
             ],
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
+            children: [
+              const Text(
                 'Are you sure you want to clear all data?',
                 style: TextStyle(
-                  color: Color(0xFF424242),
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'This action will delete all your transactions and cannot be undone.',
+                'This will delete all transactions and cannot be undone.',
                 style: TextStyle(
-                  color: Color(0xFF757575),
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                  color: Color(0xFF757575),
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
               style: TextButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                backgroundColor: const Color(0xFFFFEBEE),
-                foregroundColor: const Color(0xFFE53935),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+                foregroundColor: Theme.of(context).colorScheme.error,
+                backgroundColor: Theme.of(context).colorScheme.errorContainer.withOpacity(0.1),
               ),
-              child: const Text(
-                'Clear All Data',
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+              child: const Text('Clear All Data'),
             ),
           ],
         );
@@ -95,67 +66,42 @@ class SettingsPage extends StatelessWidget {
 
   Future<void> _clearAllData(BuildContext context) async {
     try {
-      final box = Hive.box<TransactionModel>('transactions');
+      final box = await Hive.openBox<TransactionModel>('transactions');
       await box.clear();
       
-      // Refresh transactions list
       context.read<TransactionBloc>().add(const TransactionEvent.started());
       
-      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
-            children: const [
+            children: [
               Icon(
-                Icons.check_circle_outline_rounded,
-                color: Colors.white,
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.onPrimary,
               ),
-              SizedBox(width: 12),
-              Text(
-                'All data has been cleared',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              const SizedBox(width: 12),
+              const Text('All data has been cleared'),
             ],
           ),
-          backgroundColor: const Color(0xFF2E7D32),
+          backgroundColor: Colors.green,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          margin: const EdgeInsets.all(16),
-          duration: const Duration(seconds: 3),
         ),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Row(
-            children: const [
+            children: [
               Icon(
-                Icons.error_outline_rounded,
-                color: Colors.white,
+                Icons.error,
+                color: Theme.of(context).colorScheme.onError,
               ),
-              SizedBox(width: 12),
-              Text(
-                'Failed to clear data',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              const SizedBox(width: 12),
+              const Text('Failed to clear data'),
             ],
           ),
-          backgroundColor: const Color(0xFFE53935),
+          backgroundColor: Theme.of(context).colorScheme.error,
           behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          margin: const EdgeInsets.all(16),
         ),
       );
     }
@@ -164,77 +110,85 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Settings',
-          style: TextStyle(fontWeight: FontWeight.w600),
+      extendBodyBehindAppBar: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).colorScheme.primary.withOpacity(0.9),
+                Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+              child: AppBar(
+                title: const Text('Settings'),
+              ),
+            ),
+          ),
         ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: const Color(0xFF2E7D32),
-        foregroundColor: Colors.white,
       ),
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFF5F5F5), // Light grey
+              Theme.of(context).colorScheme.background,
               Colors.white,
             ],
           ),
         ),
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            children: [
+              _buildSection(
+                context,
+                title: 'General',
+                icon: Icons.settings_rounded,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                    child: Text(
-                      'General',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF424242),
-                      ),
-                    ),
-                  ),
                   ListTile(
                     leading: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE8F5E9),
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.color_lens_rounded,
-                        color: Color(0xFF2E7D32),
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 24,
                       ),
                     ),
                     title: const Text(
                       'Theme',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF424242),
                       ),
                     ),
-                    subtitle: const Text(
+                    subtitle: Text(
                       'Light',
                       style: TextStyle(
-                        color: Color(0xFF757575),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
-                    trailing: const Icon(
+                    trailing: Icon(
                       Icons.chevron_right_rounded,
-                      color: Color(0xFF757575),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     onTap: () {
                       // TODO: Implement theme selection
@@ -244,30 +198,30 @@ class SettingsPage extends StatelessWidget {
                     leading: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE8F5E9),
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.language_rounded,
-                        color: Color(0xFF2E7D32),
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 24,
                       ),
                     ),
                     title: const Text(
                       'Language',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF424242),
                       ),
                     ),
-                    subtitle: const Text(
+                    subtitle: Text(
                       'English',
                       style: TextStyle(
-                        color: Color(0xFF757575),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
-                    trailing: const Icon(
+                    trailing: Icon(
                       Icons.chevron_right_rounded,
-                      color: Color(0xFF757575),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     onTap: () {
                       // TODO: Implement language selection
@@ -275,73 +229,34 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              _buildSection(
+                context,
+                title: 'About',
+                icon: Icons.info_outline_rounded,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                    child: Text(
-                      'About',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF424242),
-                      ),
-                    ),
-                  ),
                   ListTile(
                     leading: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFE8F5E9),
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.info_outline_rounded,
-                        color: Color(0xFF2E7D32),
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 24,
                       ),
                     ),
                     title: const Text(
                       'Version',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF424242),
                       ),
                     ),
-                    subtitle: const Text(
+                    subtitle: Text(
                       '1.0.0',
                       style: TextStyle(
-                        color: Color(0xFF757575),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 16, 16, 8),
-                    child: Text(
-                      'Data',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF424242),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ),
@@ -349,43 +264,65 @@ class SettingsPage extends StatelessWidget {
                     leading: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFFEBEE),
+                        color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Icon(
+                      child: Icon(
+                        Icons.code_rounded,
+                        color: Theme.of(context).colorScheme.primary,
+                        size: 24,
+                      ),
+                    ),
+                    title: const Text(
+                      'Source Code',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    subtitle: Text(
+                      'View on GitHub',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    trailing: Icon(
+                      Icons.open_in_new_rounded,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    onTap: () {
+                      // TODO: Open GitHub repository
+                    },
+                  ),
+                ],
+              ),
+              _buildSection(
+                context,
+                title: 'Data',
+                icon: Icons.storage_rounded,
+                children: [
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.error.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Icon(
                         Icons.delete_outline_rounded,
-                        color: Color(0xFFE53935),
+                        color: Theme.of(context).colorScheme.error,
+                        size: 24,
                       ),
                     ),
                     title: const Text(
                       'Clear data',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF424242),
                       ),
                     ),
-                    subtitle: const Text(
+                    subtitle: Text(
                       'Delete all transactions',
                       style: TextStyle(
-                        color: Color(0xFF757575),
-                      ),
-                    ),
-                    trailing: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFFEBEE),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        'Clear',
-                        style: TextStyle(
-                          color: Color(0xFFE53935),
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                        ),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                     ),
                     onTap: () async {
@@ -396,10 +333,56 @@ class SettingsPage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildSection(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required List<Widget> children,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  icon,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Card(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            children: children,
+          ),
+        ),
+      ],
     );
   }
 } 

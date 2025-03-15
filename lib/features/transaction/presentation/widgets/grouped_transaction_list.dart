@@ -254,7 +254,7 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                height: isExpanded ? group.transactions.length * 76.0 + 8: 0,
+                height: isExpanded ? group.transactions.length * 88: 0,
                 child: SingleChildScrollView(
                   physics: const NeverScrollableScrollPhysics(),
                   child: Column(
