@@ -11,6 +11,7 @@ class GroupedTransactionList extends StatefulWidget {
   final GroupByType groupByType;
   final bool areAllGroupsExpanded;
   final ValueChanged<bool> onToggleAllGroups;
+  final ValueChanged<String>? onDeleteTransaction;
 
   const GroupedTransactionList({
     super.key,
@@ -18,6 +19,7 @@ class GroupedTransactionList extends StatefulWidget {
     required this.groupByType,
     required this.areAllGroupsExpanded,
     required this.onToggleAllGroups,
+    this.onDeleteTransaction,
   });
 
   @override
@@ -260,6 +262,9 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
                       return TransactionListItem(
                         transaction: transaction,
                         animation: const AlwaysStoppedAnimation(1),
+                        onDelete: widget.onDeleteTransaction != null
+                            ? () => widget.onDeleteTransaction!(transaction.id)
+                            : null,
                       );
                     }).toList(),
                   ),

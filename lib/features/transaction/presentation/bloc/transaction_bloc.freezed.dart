@@ -20,18 +20,21 @@ mixin _$TransactionEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() refresh,
+    required TResult Function(String id) deleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? refresh,
+    TResult? Function(String id)? deleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? refresh,
+    TResult Function(String id)? deleted,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -39,18 +42,21 @@ mixin _$TransactionEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_Refresh value) refresh,
+    required TResult Function(_Deleted value) deleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_Refresh value)? refresh,
+    TResult? Function(_Deleted value)? deleted,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_Refresh value)? refresh,
+    TResult Function(_Deleted value)? deleted,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -113,6 +119,7 @@ class _$_Started implements _Started {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() refresh,
+    required TResult Function(String id) deleted,
   }) {
     return started();
   }
@@ -122,6 +129,7 @@ class _$_Started implements _Started {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? refresh,
+    TResult? Function(String id)? deleted,
   }) {
     return started?.call();
   }
@@ -131,6 +139,7 @@ class _$_Started implements _Started {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? refresh,
+    TResult Function(String id)? deleted,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -144,6 +153,7 @@ class _$_Started implements _Started {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_Refresh value) refresh,
+    required TResult Function(_Deleted value) deleted,
   }) {
     return started(this);
   }
@@ -153,6 +163,7 @@ class _$_Started implements _Started {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_Refresh value)? refresh,
+    TResult? Function(_Deleted value)? deleted,
   }) {
     return started?.call(this);
   }
@@ -162,6 +173,7 @@ class _$_Started implements _Started {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_Refresh value)? refresh,
+    TResult Function(_Deleted value)? deleted,
     required TResult orElse(),
   }) {
     if (started != null) {
@@ -214,6 +226,7 @@ class _$_Refresh implements _Refresh {
   TResult when<TResult extends Object?>({
     required TResult Function() started,
     required TResult Function() refresh,
+    required TResult Function(String id) deleted,
   }) {
     return refresh();
   }
@@ -223,6 +236,7 @@ class _$_Refresh implements _Refresh {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function()? refresh,
+    TResult? Function(String id)? deleted,
   }) {
     return refresh?.call();
   }
@@ -232,6 +246,7 @@ class _$_Refresh implements _Refresh {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function()? refresh,
+    TResult Function(String id)? deleted,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -245,6 +260,7 @@ class _$_Refresh implements _Refresh {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_Refresh value) refresh,
+    required TResult Function(_Deleted value) deleted,
   }) {
     return refresh(this);
   }
@@ -254,6 +270,7 @@ class _$_Refresh implements _Refresh {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_Refresh value)? refresh,
+    TResult? Function(_Deleted value)? deleted,
   }) {
     return refresh?.call(this);
   }
@@ -263,6 +280,7 @@ class _$_Refresh implements _Refresh {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_Refresh value)? refresh,
+    TResult Function(_Deleted value)? deleted,
     required TResult orElse(),
   }) {
     if (refresh != null) {
@@ -274,6 +292,144 @@ class _$_Refresh implements _Refresh {
 
 abstract class _Refresh implements TransactionEvent {
   const factory _Refresh() = _$_Refresh;
+}
+
+/// @nodoc
+abstract class _$$_DeletedCopyWith<$Res> {
+  factory _$$_DeletedCopyWith(
+          _$_Deleted value, $Res Function(_$_Deleted) then) =
+      __$$_DeletedCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String id});
+}
+
+/// @nodoc
+class __$$_DeletedCopyWithImpl<$Res>
+    extends _$TransactionEventCopyWithImpl<$Res, _$_Deleted>
+    implements _$$_DeletedCopyWith<$Res> {
+  __$$_DeletedCopyWithImpl(_$_Deleted _value, $Res Function(_$_Deleted) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+  }) {
+    return _then(_$_Deleted(
+      null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$_Deleted implements _Deleted {
+  const _$_Deleted(this.id);
+
+  @override
+  final String id;
+
+  @override
+  String toString() {
+    return 'TransactionEvent.deleted(id: $id)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$_Deleted &&
+            (identical(other.id, id) || other.id == id));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, id);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_DeletedCopyWith<_$_Deleted> get copyWith =>
+      __$$_DeletedCopyWithImpl<_$_Deleted>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() started,
+    required TResult Function() refresh,
+    required TResult Function(String id) deleted,
+  }) {
+    return deleted(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? started,
+    TResult? Function()? refresh,
+    TResult? Function(String id)? deleted,
+  }) {
+    return deleted?.call(id);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? started,
+    TResult Function()? refresh,
+    TResult Function(String id)? deleted,
+    required TResult orElse(),
+  }) {
+    if (deleted != null) {
+      return deleted(id);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) started,
+    required TResult Function(_Refresh value) refresh,
+    required TResult Function(_Deleted value) deleted,
+  }) {
+    return deleted(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? started,
+    TResult? Function(_Refresh value)? refresh,
+    TResult? Function(_Deleted value)? deleted,
+  }) {
+    return deleted?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? started,
+    TResult Function(_Refresh value)? refresh,
+    TResult Function(_Deleted value)? deleted,
+    required TResult orElse(),
+  }) {
+    if (deleted != null) {
+      return deleted(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Deleted implements TransactionEvent {
+  const factory _Deleted(final String id) = _$_Deleted;
+
+  String get id;
+  @JsonKey(ignore: true)
+  _$$_DeletedCopyWith<_$_Deleted> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc

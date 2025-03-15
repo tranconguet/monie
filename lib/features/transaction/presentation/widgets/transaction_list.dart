@@ -28,6 +28,10 @@ class _TransactionListState extends State<TransactionList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   List<Transaction> _transactions = [];
 
+  void _handleDeleteTransaction(String id) {
+    context.read<TransactionBloc>().add(TransactionEvent.deleted(id));
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionBloc, TransactionState>(
@@ -117,6 +121,7 @@ class _TransactionListState extends State<TransactionList> {
               groupByType: widget.groupByType,
               areAllGroupsExpanded: widget.areAllGroupsExpanded,
               onToggleAllGroups: widget.onToggleAllGroups,
+              onDeleteTransaction: _handleDeleteTransaction,
             );
           },
           error: (message) => Center(

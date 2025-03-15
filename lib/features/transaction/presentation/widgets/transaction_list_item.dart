@@ -6,12 +6,64 @@ import '../../domain/entities/transaction_type.dart';
 class TransactionListItem extends StatelessWidget {
   final Transaction transaction;
   final Animation<double> animation;
+  final VoidCallback? onDelete;
 
   const TransactionListItem({
     super.key,
     required this.transaction,
     required this.animation,
+    this.onDelete,
   });
+
+  Future<bool> _showDeleteConfirmation(BuildContext context) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Delete Transaction',
+            style: TextStyle(
+              color: Color(0xFF424242),
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          content: const Text(
+            'Are you sure you want to delete this transaction?',
+            style: TextStyle(
+              color: Color(0xFF757575),
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Color(0xFF757575),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFFE53935),
+              ),
+              child: const Text(
+                'Delete',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    ) ?? false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,15 +125,37 @@ class TransactionListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              trailing: Text(
-                '\$${NumberFormat('#,###.##').format(transaction.amount)}',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: isIncome
-                      ? const Color(0xFF2E7D32)  // Dark green
-                      : const Color(0xFFE53935), // Dark red
-                ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    '\$${NumberFormat('#,###.##').format(transaction.amount)}',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isIncome
+                          ? const Color(0xFF2E7D32)  // Dark green
+                          : const Color(0xFFE53935), // Dark red
+                    ),
+                  ),
+                  if (onDelete != null) ...[
+                    const SizedBox(width: 8),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete_outline_rounded,
+                        color: Color(0xFFE53935),
+                        size: 20,
+                      ),
+                      splashRadius: 24,
+                      tooltip: 'Delete transaction',
+                      onPressed: () async {
+                        if (await _showDeleteConfirmation(context)) {
+                          onDelete?.call();
+                        }
+                      },
+                    ),
+                  ],
+                ],
               ),
             ),
           ),

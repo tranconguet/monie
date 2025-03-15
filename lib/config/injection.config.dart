@@ -15,11 +15,12 @@ import '../features/transaction/data/repositories/transaction_repository_impl.da
     as _i6;
 import '../features/transaction/domain/repositories/transaction_repository.dart'
     as _i5;
-import '../features/transaction/domain/usecases/get_transactions.dart' as _i7;
+import '../features/transaction/domain/usecases/delete_transaction.dart' as _i7;
+import '../features/transaction/domain/usecases/get_transactions.dart' as _i8;
 import '../features/transaction/presentation/bloc/form/transaction_form_bloc.dart'
-    as _i9;
+    as _i10;
 import '../features/transaction/presentation/bloc/transaction_bloc.dart'
-    as _i8; // ignore_for_file: unnecessary_lambdas
+    as _i9; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// an extension to register the provided dependencies inside of [GetIt]
@@ -39,13 +40,17 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i4.TransactionLocalDataSourceImpl());
     gh.factory<_i5.TransactionRepository>(() =>
         _i6.TransactionRepositoryImpl(get<_i4.TransactionLocalDataSource>()));
-    gh.factory<_i7.GetTransactions>(
-        () => _i7.GetTransactions(get<_i5.TransactionRepository>()));
-    gh.singleton<_i8.TransactionBloc>(
-        _i8.TransactionBloc(get<_i7.GetTransactions>()));
-    gh.singleton<_i9.TransactionFormBloc>(_i9.TransactionFormBloc(
+    gh.factory<_i7.DeleteTransaction>(
+        () => _i7.DeleteTransaction(get<_i5.TransactionRepository>()));
+    gh.factory<_i8.GetTransactions>(
+        () => _i8.GetTransactions(get<_i5.TransactionRepository>()));
+    gh.singleton<_i9.TransactionBloc>(_i9.TransactionBloc(
+      get<_i8.GetTransactions>(),
+      get<_i7.DeleteTransaction>(),
+    ));
+    gh.singleton<_i10.TransactionFormBloc>(_i10.TransactionFormBloc(
       get<_i5.TransactionRepository>(),
-      get<_i8.TransactionBloc>(),
+      get<_i9.TransactionBloc>(),
     ));
     return this;
   }
