@@ -5,7 +5,7 @@ class AppLocalizationsVi extends AppLocalizations {
   AppLocalizationsVi([String locale = 'vi']) : super(locale);
 
   @override
-  String get appName => 'Quản lý chi tiêu';
+  String get appName => 'Monie';
 
   @override
   String get newTransaction => 'Giao dịch mới';

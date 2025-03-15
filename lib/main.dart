@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<LanguageProvider>(
         builder: (context, languageProvider, child) {
           return MaterialApp(
-            title: 'Money Manager',
+            title: 'Monie',
             theme: AppTheme.lightTheme,
             debugShowCheckedModeBanner: false,
             locale: languageProvider.locale,
