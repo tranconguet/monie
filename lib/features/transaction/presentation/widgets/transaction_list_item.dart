@@ -74,7 +74,7 @@ class TransactionListItem extends StatelessWidget {
                 ],
               ),
               trailing: Text(
-                '\$${transaction.amount}',
+                '\$${NumberFormat('#,###.##').format(transaction.amount)}',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

@@ -13,7 +13,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  bool _isFormExpanded = true;
+  bool _isFormExpanded = false;
+  bool _areAllGroupsExpanded = true;
   GroupByType _groupByType = GroupByType.type;
   late final AnimationController _animationController;
   late final Animation<double> _animation;
@@ -29,9 +30,6 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       parent: _animationController,
       curve: Curves.easeInOutCubic,
     );
-    if (_isFormExpanded) {
-      _animationController.value = 1.0;
-    }
   }
 
   @override
@@ -268,13 +266,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         ],
                       ),
                       IconButton(
-                        icon: const Icon(
-                          Icons.refresh,
-                          color: Color(0xFF2E7D32), // Dark green
+                        icon: Icon(
+                          _areAllGroupsExpanded
+                              ? Icons.unfold_less_rounded
+                              : Icons.unfold_more_rounded,
+                          color: const Color(0xFF2E7D32),
                         ),
+                        tooltip: _areAllGroupsExpanded
+                            ? 'Collapse all groups'
+                            : 'Expand all groups',
                         onPressed: () {
-                          context.read<TransactionBloc>()
-                              .add(const TransactionEvent.refresh());
+                          setState(() {
+                            _areAllGroupsExpanded = !_areAllGroupsExpanded;
+                          });
                         },
                       ),
                     ],
@@ -284,6 +288,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 Expanded(
                   child: TransactionList(
                     groupByType: _groupByType,
+                    areAllGroupsExpanded: _areAllGroupsExpanded,
+                    onToggleAllGroups: (value) {
+                      setState(() {
+                        _areAllGroupsExpanded = value;
+                      });
+                    },
                   ),
                 ),
               ],

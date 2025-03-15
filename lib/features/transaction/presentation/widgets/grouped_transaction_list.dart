@@ -9,11 +9,15 @@ import 'transaction_list_item.dart';
 class GroupedTransactionList extends StatefulWidget {
   final List<Transaction> transactions;
   final GroupByType groupByType;
+  final bool areAllGroupsExpanded;
+  final ValueChanged<bool> onToggleAllGroups;
 
   const GroupedTransactionList({
     super.key,
     required this.transactions,
     required this.groupByType,
+    required this.areAllGroupsExpanded,
+    required this.onToggleAllGroups,
   });
 
   @override
@@ -41,6 +45,21 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
         _expandedGroups.clear();
       }
     }
+
+    if (oldWidget.areAllGroupsExpanded != widget.areAllGroupsExpanded) {
+      _updateExpandedGroups();
+    }
+  }
+
+  void _updateExpandedGroups() {
+    setState(() {
+      _expandedGroups.clear();
+      if (widget.areAllGroupsExpanded) {
+        for (var i = 0; i < _groupedTransactions.length; i++) {
+          _expandedGroups.add(i);
+        }
+      }
+    });
   }
 
   void _updateGroups() {
@@ -95,6 +114,9 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
         return bDate.compareTo(aDate);
       });
     }
+
+    // Update expanded groups based on current state
+    _updateExpandedGroups();
   }
 
   void _toggleGroup(int index) {
@@ -202,7 +224,7 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '\$${group.total.abs().toStringAsFixed(2)}',
+                          '\$${NumberFormat('#,###.##').format(group.total.abs())}',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

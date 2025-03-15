@@ -10,10 +10,14 @@ import 'grouped_transaction_list.dart';
 
 class TransactionList extends StatefulWidget {
   final GroupByType groupByType;
+  final bool areAllGroupsExpanded;
+  final ValueChanged<bool> onToggleAllGroups;
 
   const TransactionList({
     super.key,
     required this.groupByType,
+    required this.areAllGroupsExpanded,
+    required this.onToggleAllGroups,
   });
 
   @override
@@ -111,6 +115,8 @@ class _TransactionListState extends State<TransactionList> {
             return GroupedTransactionList(
               transactions: transactions,
               groupByType: widget.groupByType,
+              areAllGroupsExpanded: widget.areAllGroupsExpanded,
+              onToggleAllGroups: widget.onToggleAllGroups,
             );
           },
           error: (message) => Center(
