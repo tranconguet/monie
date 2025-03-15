@@ -3,6 +3,47 @@ import 'package:intl/intl.dart';
 import '../../domain/entities/transaction.dart';
 import '../../domain/entities/transaction_type.dart';
 
+class _DeleteButton extends StatefulWidget {
+  final VoidCallback onPressed;
+
+  const _DeleteButton({
+    required this.onPressed,
+  });
+
+  @override
+  State<_DeleteButton> createState() => _DeleteButtonState();
+}
+
+class _DeleteButtonState extends State<_DeleteButton> {
+  bool isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => isHovered = true),
+      onExit: (_) => setState(() => isHovered = false),
+      child: IconButton(
+        icon: AnimatedDefaultTextStyle(
+          duration: const Duration(milliseconds: 200),
+          style: TextStyle(
+            color: isHovered ? const Color(0xFFE53935) : const Color(0xFF757575),
+          ),
+          child: Icon(
+            Icons.delete_outline_rounded,
+            size: 20,
+            color: isHovered ? const Color(0xFFE53935) : const Color(0xFF757575),
+          ),
+        ),
+        splashRadius: 24,
+        tooltip: 'Delete transaction',
+        onPressed: widget.onPressed,
+        hoverColor: const Color(0xFFFFEBEE),
+      ),
+    );
+  }
+}
+
 class TransactionListItem extends StatelessWidget {
   final Transaction transaction;
   final Animation<double> animation;
@@ -20,15 +61,25 @@ class TransactionListItem extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(
-            'Delete Transaction',
-            style: TextStyle(
-              color: Color(0xFF424242),
-              fontWeight: FontWeight.w600,
-            ),
+          title: Row(
+            children: const [
+              Icon(
+                Icons.warning_amber_rounded,
+                color: Color(0xFFE53935),
+                size: 24,
+              ),
+              SizedBox(width: 12),
+              Text(
+                'Delete Transaction',
+                style: TextStyle(
+                  color: Color(0xFF424242),
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
           ),
           content: const Text(
-            'Are you sure you want to delete this transaction?',
+            'Are you sure you want to delete this transaction? This action cannot be undone.',
             style: TextStyle(
               color: Color(0xFF757575),
             ),
@@ -39,6 +90,12 @@ class TransactionListItem extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
               child: const Text(
                 'Cancel',
                 style: TextStyle(
@@ -50,7 +107,12 @@ class TransactionListItem extends StatelessWidget {
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
               style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                backgroundColor: const Color(0xFFFFEBEE),
                 foregroundColor: const Color(0xFFE53935),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
               ),
               child: const Text(
                 'Delete',
@@ -138,23 +200,14 @@ class TransactionListItem extends StatelessWidget {
                           : const Color(0xFFE53935), // Dark red
                     ),
                   ),
-                  if (onDelete != null) ...[
-                    const SizedBox(width: 8),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: Color(0xFFE53935),
-                        size: 20,
-                      ),
-                      splashRadius: 24,
-                      tooltip: 'Delete transaction',
+                  if (onDelete != null)
+                    _DeleteButton(
                       onPressed: () async {
                         if (await _showDeleteConfirmation(context)) {
                           onDelete?.call();
                         }
                       },
                     ),
-                  ],
                 ],
               ),
             ),
