@@ -17,19 +17,19 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  bool _isFormExpanded = false;
-  bool _areAllGroupsExpanded = true;
-  GroupByType _groupByType = GroupByType.type;
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late final AnimationController _animationController;
   late final Animation<double> _animation;
+  bool _isFormExpanded = false;
+  GroupByType _groupByType = GroupByType.type;
+  bool _areAllGroupsExpanded = false;
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
       vsync: this,
+      duration: const Duration(milliseconds: 300),
     );
     _animation = CurvedAnimation(
       parent: _animationController,
@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         );
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         extendBodyBehindAppBar: true,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight),

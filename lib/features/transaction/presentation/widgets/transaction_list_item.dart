@@ -147,88 +147,49 @@ class TransactionListItem extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
     
     return Card(
-      child: InkWell(
-        onTap: () async {
-          if (onDelete != null) {
-            if (await _showDeleteConfirmation(context)) {
-              onDelete?.call();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.transactionDeleted),
-                  backgroundColor: Colors.green,
-                  behavior: SnackBarBehavior.floating,
-                ),
-              );
-            }
-          }
-        },
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: transaction.type == TransactionType.income
-                      ? Colors.green.withOpacity(0.1)
-                      : Colors.red.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  transaction.type == TransactionType.income
-                      ? Icons.arrow_upward_rounded
-                      : Icons.arrow_downward_rounded,
-                  color: transaction.type == TransactionType.income
-                      ? Colors.green
-                      : Colors.red,
-                  size: 24,
-                ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: transaction.type == TransactionType.income
+                    ? Colors.green.withOpacity(0.1)
+                    : Colors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
               ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
+              child: Icon(
+                transaction.type == TransactionType.income
+                    ? Icons.arrow_upward_rounded
+                    : Icons.arrow_downward_rounded,
+                color: transaction.type == TransactionType.income
+                    ? Colors.green
+                    : Colors.red,
+                size: 24,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 44,
+                    child: Text(
                       transaction.description,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      DateFormat.yMMMd(Localizations.localeOf(context).languageCode)
-                          .format(transaction.date),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 16),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    NumberFormat.currency(
-                      locale: Localizations.localeOf(context).toString(),
-                      symbol: '\$',
-                    ).format(transaction.amount),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: transaction.type == TransactionType.income
-                          ? Colors.green
-                          : Colors.red,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    transaction.category ?? '',
+                    DateFormat.yMMMd(Localizations.localeOf(context).languageCode)
+                        .format(transaction.date),
                     style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -236,7 +197,33 @@ class TransactionListItem extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(width: 8),
+            ),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '\$${NumberFormat('#,###.##').format(transaction.amount.abs())}',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: transaction.type == TransactionType.income
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  transaction.category ?? '',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(width: 8),
+            if (onDelete != null)
               _DeleteButton(onDelete: () async {
                 if (await _showDeleteConfirmation(context)) {
                   onDelete?.call();
@@ -249,8 +236,7 @@ class TransactionListItem extends StatelessWidget {
                   );
                 }
               }),
-            ],
-          ),
+          ],
         ),
       ),
     );

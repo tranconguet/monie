@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,26 +17,22 @@ import 'features/transaction/presentation/bloc/transaction_bloc.dart';
 import 'features/transaction/presentation/pages/home_page.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   
   print('Initializing Hive...');
-  // Initialize Hive
   await Hive.initFlutter();
   
   print('Registering Hive adapters...');
-  // Register Hive Adapters
   Hive.registerAdapter(TransactionModelAdapter());
   Hive.registerAdapter(TransactionTypeAdapter());
   
   print('Opening Hive box...');
-  // Open Hive Box
   final box = await Hive.openBox<TransactionModel>('transactions');
   print('Hive box opened with ${box.length} items');
   
-  // Initialize SharedPreferences
   final prefs = await SharedPreferences.getInstance();
   
-  // Add shutdown hook
   WidgetsBinding.instance.addObserver(
     LifecycleEventHandler(
       detachedCallBack: () async {
@@ -47,35 +44,22 @@ void main() async {
   );
   
   print('Initializing dependencies...');
-  // Initialize dependencies
   await configureDependencies();
   print('Dependencies initialized');
   
   runApp(
     ChangeNotifierProvider(
       create: (_) => LanguageProvider(prefs),
-      child: const MoneyManagerApp(),
+      child: const MyApp(),
     ),
   );
+
+  // Remove splash screen after initialization
+  FlutterNativeSplash.remove();
 }
 
-class LifecycleEventHandler extends WidgetsBindingObserver {
-  final Future<void> Function() detachedCallBack;
-
-  LifecycleEventHandler({
-    required this.detachedCallBack,
-  });
-
-  @override
-  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.detached) {
-      await detachedCallBack();
-    }
-  }
-}
-
-class MoneyManagerApp extends StatelessWidget {
-  const MoneyManagerApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,9 +91,32 @@ class MoneyManagerApp extends StatelessWidget {
               Locale('vi'),
             ],
             home: const HomePage(),
+            color: Colors.white,
+            // Add this to ensure consistent background during transitions
+            builder: (context, child) {
+              return Container(
+                color: Colors.white,
+                child: child,
+              );
+            },
           );
         },
       ),
     );
+  }
+}
+
+class LifecycleEventHandler extends WidgetsBindingObserver {
+  final Future<void> Function() detachedCallBack;
+
+  LifecycleEventHandler({
+    required this.detachedCallBack,
+  });
+
+  @override
+  Future<void> didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.detached) {
+      await detachedCallBack();
+    }
   }
 }
