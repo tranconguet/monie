@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'config/injection.dart';
+import 'core/theme/app_theme.dart';
 import 'features/transaction/data/models/transaction_model.dart';
 import 'features/transaction/domain/entities/transaction_type.dart';
 import 'features/transaction/domain/repositories/transaction_repository.dart';
@@ -77,10 +78,8 @@ class MoneyManagerApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Money Manager',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          useMaterial3: true,
-        ),
+        theme: AppTheme.lightTheme,
+        debugShowCheckedModeBanner: false,
         home: const HomePage(),
       ),
     );

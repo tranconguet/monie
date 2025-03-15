@@ -68,14 +68,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Money Manager',
-            style: TextStyle(fontWeight: FontWeight.w600),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: const Color(0xFF2E7D32), // Dark green
-          foregroundColor: Colors.white,
+          title: const Text('Money Manager'),
           actions: [
             IconButton(
               icon: const Icon(Icons.settings_rounded),
@@ -92,12 +85,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           ],
         ),
         body: Container(
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFFF5F5F5), // Light grey
+                Theme.of(context).colorScheme.background,
                 Colors.white,
               ],
             ),
@@ -107,125 +100,108 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: _toggleForm,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Row(
-                            children: [
-                              AnimatedRotation(
-                                turns: _isFormExpanded ? 0.125 : 0,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOutCubic,
-                                child: const Icon(
-                                  Icons.add_circle,
-                                  color: Color(0xFF2E7D32),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              const Text(
-                                'New Transaction',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF424242),
-                                ),
-                              ),
-                              const Spacer(),
-                              AnimatedRotation(
-                                turns: _isFormExpanded ? 0.5 : 0,
-                                duration: const Duration(milliseconds: 300),
-                                curve: Curves.easeInOutCubic,
-                                child: const Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: Color(0xFF757575),
-                                ),
-                              ),
-                            ],
+                Hero(
+                  tag: 'new_transaction_card',
+                  child: Card(
+                    child: Column(
+                      children: [
+                        InkWell(
+                          onTap: _toggleForm,
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16),
                           ),
-                        ),
-                      ),
-                      ClipRect(
-                        child: SizeTransition(
-                          sizeFactor: _animation,
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                            child: TransactionForm(),
+                            padding: const EdgeInsets.all(16.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: AnimatedRotation(
+                                    turns: _isFormExpanded ? 0.125 : 0,
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeInOutCubic,
+                                    child: Icon(
+                                      Icons.add_circle,
+                                      color: Theme.of(context).colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                const Text(
+                                  'New Transaction',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Spacer(),
+                                AnimatedRotation(
+                                  turns: _isFormExpanded ? 0.5 : 0,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOutCubic,
+                                  child: const Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                        ClipRect(
+                          child: SizeTransition(
+                            sizeFactor: _animation,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              child: TransactionForm(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 16),
                 Card(
-                  elevation: 2,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     child: Row(
                       children: [
-                        const Icon(
-                          Icons.sort,
-                          color: Color(0xFF2E7D32),
-                          size: 20,
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            Icons.sort,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20,
+                          ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 12),
                         const Text(
                           'Group by:',
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: Color(0xFF424242),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
                           child: DropdownButtonFormField<GroupByType>(
                             value: _groupByType,
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               isDense: true,
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: const BorderSide(color: Color(0xFFBDBDBD)),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
                               ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: const BorderSide(color: Color(0xFFE0E0E0)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(6),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFF2E7D32),
-                                  width: 2,
-                                ),
-                              ),
-                              filled: true,
-                              fillColor: Colors.white,
                             ),
-                            icon: const Icon(
-                              Icons.arrow_drop_down_rounded,
-                              color: Color(0xFF2E7D32),
-                              size: 24,
-                            ),
-                            style: const TextStyle(
-                              color: Color(0xFF424242),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            dropdownColor: Colors.white,
-                            menuMaxHeight: 300,
-                            borderRadius: BorderRadius.circular(6),
                             items: const [
                               DropdownMenuItem(
                                 value: GroupByType.type,
@@ -258,24 +234,30 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                 ),
                 const SizedBox(height: 24),
-                Container(
+                Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: const [
-                          Icon(
-                            Icons.receipt_long,
-                            color: Color(0xFF2E7D32), // Dark green
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              Icons.receipt_long,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
-                          SizedBox(width: 8),
-                          Text(
+                          const SizedBox(width: 12),
+                          const Text(
                             'Transactions',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF424242), // Dark grey
                             ),
                           ),
                         ],
@@ -285,7 +267,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           _areAllGroupsExpanded
                               ? Icons.unfold_less_rounded
                               : Icons.unfold_more_rounded,
-                          color: const Color(0xFF2E7D32),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                         tooltip: _areAllGroupsExpanded
                             ? 'Collapse all groups'

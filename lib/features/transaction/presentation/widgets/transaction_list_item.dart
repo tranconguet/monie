@@ -4,10 +4,10 @@ import '../../domain/entities/transaction.dart';
 import '../../domain/entities/transaction_type.dart';
 
 class _DeleteButton extends StatefulWidget {
-  final VoidCallback onPressed;
+  final VoidCallback onDelete;
 
   const _DeleteButton({
-    required this.onPressed,
+    required this.onDelete,
   });
 
   @override
@@ -15,30 +15,26 @@ class _DeleteButton extends StatefulWidget {
 }
 
 class _DeleteButtonState extends State<_DeleteButton> {
-  bool isHovered = false;
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      cursor: SystemMouseCursors.click,
-      onEnter: (_) => setState(() => isHovered = true),
-      onExit: (_) => setState(() => isHovered = false),
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
       child: IconButton(
-        icon: AnimatedDefaultTextStyle(
+        icon: AnimatedSwitcher(
           duration: const Duration(milliseconds: 200),
-          style: TextStyle(
-            color: isHovered ? const Color(0xFFE53935) : const Color(0xFF757575),
-          ),
           child: Icon(
             Icons.delete_outline_rounded,
-            size: 20,
-            color: isHovered ? const Color(0xFFE53935) : const Color(0xFF757575),
+            key: ValueKey(_isHovered),
+            color: _isHovered
+                ? Theme.of(context).colorScheme.error
+                : Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
-        splashRadius: 24,
+        onPressed: widget.onDelete,
         tooltip: 'Delete transaction',
-        onPressed: widget.onPressed,
-        hoverColor: const Color(0xFFFFEBEE),
       ),
     );
   }
@@ -129,88 +125,95 @@ class TransactionListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isIncome = transaction.type == TransactionType.income;
-
-    return SizeTransition(
-      sizeFactor: animation,
-      child: FadeTransition(
-        opacity: animation,
-        child: SlideTransition(
-          position: animation.drive(
-            Tween(
-              begin: const Offset(1.0, 0.0),
-              end: const Offset(0.0, 0.0),
-            ).chain(CurveTween(curve: Curves.easeOutCubic)),
-          ),
-          child: Card(
-            elevation: 1,
-            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(8),
+    return Card(
+      child: InkWell(
+        onTap: () async {
+          if (onDelete != null) {
+            if (await _showDeleteConfirmation(context)) {
+              onDelete?.call();
+            }
+          }
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: isIncome
-                      ? const Color(0xFFE8F5E9)  // Light green
-                      : const Color(0xFFFFEBEE), // Light red
-                  borderRadius: BorderRadius.circular(8),
+                  color: transaction.type == TransactionType.income
+                      ? Colors.green.withOpacity(0.1)
+                      : Colors.red.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(
-                  isIncome ? Icons.arrow_upward : Icons.arrow_downward,
-                  color: isIncome
-                      ? const Color(0xFF2E7D32)  // Dark green
-                      : const Color(0xFFE53935), // Dark red
+                  transaction.type == TransactionType.income
+                      ? Icons.arrow_upward_rounded
+                      : Icons.arrow_downward_rounded,
+                  color: transaction.type == TransactionType.income
+                      ? Colors.green
+                      : Colors.red,
+                  size: 24,
                 ),
               ),
-              title: Text(
-                transaction.title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w600,
-                  color: Color(0xFF424242),
-                ),
-              ),
-              subtitle: Row(
-                children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    size: 14,
-                    color: Color(0xFF757575),
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    DateFormat('yyyy-MM-dd').format(transaction.date),
-                    style: const TextStyle(
-                      color: Color(0xFF757575),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      transaction.title,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 4),
+                    Text(
+                      DateFormat('MMM d, y').format(transaction.date),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
+              const SizedBox(width: 16),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '\$${NumberFormat('#,###.##').format(transaction.amount)}',
+                    NumberFormat.currency(
+                      locale: 'en_US',
+                      symbol: '\$',
+                    ).format(transaction.amount),
                     style: TextStyle(
                       fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: isIncome
-                          ? const Color(0xFF2E7D32)  // Dark green
-                          : const Color(0xFFE53935), // Dark red
+                      fontWeight: FontWeight.w600,
+                      color: transaction.type == TransactionType.income
+                          ? Colors.green
+                          : Colors.red,
                     ),
                   ),
-                  if (onDelete != null)
-                    _DeleteButton(
-                      onPressed: () async {
-                        if (await _showDeleteConfirmation(context)) {
-                          onDelete?.call();
-                        }
-                      },
+                  const SizedBox(height: 4),
+                  Text(
+                    transaction.category ?? '',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
+                  ),
                 ],
               ),
-            ),
+              const SizedBox(width: 8),
+              _DeleteButton(onDelete: () async {
+                if (await _showDeleteConfirmation(context)) {
+                  onDelete?.call();
+                }
+              }),
+            ],
           ),
         ),
       ),
