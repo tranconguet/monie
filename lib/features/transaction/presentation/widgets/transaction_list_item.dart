@@ -38,14 +38,14 @@ class TransactionListItem extends StatelessWidget {
               leading: Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: isIncome 
+                  color: isIncome
                       ? const Color(0xFFE8F5E9)  // Light green
                       : const Color(0xFFFFEBEE), // Light red
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Icon(
                   isIncome ? Icons.arrow_upward : Icons.arrow_downward,
-                  color: isIncome 
+                  color: isIncome
                       ? const Color(0xFF2E7D32)  // Dark green
                       : const Color(0xFFE53935), // Dark red
                 ),
@@ -78,7 +78,7 @@ class TransactionListItem extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: isIncome 
+                  color: isIncome
                       ? const Color(0xFF2E7D32)  // Dark green
                       : const Color(0xFFE53935), // Dark red
                 ),

@@ -22,6 +22,7 @@ class GroupedTransactionList extends StatefulWidget {
 
 class _GroupedTransactionListState extends State<GroupedTransactionList> {
   late List<GroupedTransactions> _groupedTransactions;
+  final Set<int> _expandedGroups = {};
 
   @override
   void initState() {
@@ -35,6 +36,10 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
     if (oldWidget.transactions != widget.transactions ||
         oldWidget.groupByType != widget.groupByType) {
       _updateGroups();
+      // Clear expanded groups when grouping type changes
+      if (oldWidget.groupByType != widget.groupByType) {
+        _expandedGroups.clear();
+      }
     }
   }
 
@@ -92,6 +97,16 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
     }
   }
 
+  void _toggleGroup(int index) {
+    setState(() {
+      if (_expandedGroups.contains(index)) {
+        _expandedGroups.remove(index);
+      } else {
+        _expandedGroups.add(index);
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.transactions.isEmpty) {
@@ -131,73 +146,104 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
         final group = _groupedTransactions[groupIndex];
         final isIncomeGroup = group.transactions.first.type == TransactionType.income;
         final isTypeGroup = widget.groupByType == GroupByType.type;
+        final isExpanded = _expandedGroups.contains(groupIndex);
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(4, 16, 4, 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      if (isTypeGroup)
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: isIncomeGroup
-                                ? const Color(0xFFE8F5E9)
-                                : const Color(0xFFFFEBEE),
-                            borderRadius: BorderRadius.circular(8),
+            InkWell(
+              onTap: () => _toggleGroup(groupIndex),
+              borderRadius: BorderRadius.circular(8),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(4, 16, 4, 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        if (isTypeGroup)
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: isIncomeGroup
+                                  ? const Color(0xFFE8F5E9)
+                                  : const Color(0xFFFFEBEE),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Icon(
+                              isIncomeGroup
+                                  ? Icons.arrow_upward
+                                  : Icons.arrow_downward,
+                              color: isIncomeGroup
+                                  ? const Color(0xFF2E7D32)
+                                  : const Color(0xFFE53935),
+                              size: 16,
+                            ),
                           ),
-                          child: Icon(
-                            isIncomeGroup
-                                ? Icons.arrow_upward
-                                : Icons.arrow_downward,
-                            color: isIncomeGroup
+                        if (isTypeGroup) const SizedBox(width: 8),
+                        if (!isTypeGroup)
+                          const Icon(
+                            Icons.calendar_today,
+                            size: 16,
+                            color: Color(0xFF757575),
+                          ),
+                        if (!isTypeGroup) const SizedBox(width: 8),
+                        Text(
+                          group.title,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xFF424242),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          '\$${group.total.abs().toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: group.total >= 0
                                 ? const Color(0xFF2E7D32)
                                 : const Color(0xFFE53935),
-                            size: 16,
                           ),
                         ),
-                      if (isTypeGroup) const SizedBox(width: 8),
-                      if (!isTypeGroup)
-                        const Icon(
-                          Icons.calendar_today,
-                          size: 16,
-                          color: Color(0xFF757575),
+                        const SizedBox(width: 8),
+                        AnimatedRotation(
+                          turns: isExpanded ? 0.5 : 0,
+                          duration: const Duration(milliseconds: 300),
+                          child: const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Color(0xFF757575),
+                          ),
                         ),
-                      if (!isTypeGroup) const SizedBox(width: 8),
-                      Text(
-                        group.title,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xFF424242),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '\$${group.total.abs().toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: group.total >= 0
-                          ? const Color(0xFF2E7D32)
-                          : const Color(0xFFE53935),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-            ...group.transactions.map((transaction) {
-              return TransactionListItem(
-                transaction: transaction,
-                animation: const AlwaysStoppedAnimation(1),
-              );
-            }),
+            ClipRect(
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                height: isExpanded ? group.transactions.length * 76.0 + 8: 0,
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    children: group.transactions.map((transaction) {
+                      return TransactionListItem(
+                        transaction: transaction,
+                        animation: const AlwaysStoppedAnimation(1),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
             if (groupIndex < _groupedTransactions.length - 1)
               const Divider(height: 32),
           ],
