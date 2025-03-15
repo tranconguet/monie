@@ -6,7 +6,7 @@ class TransactionFormState with _$TransactionFormState {
     required String amount,
     required TransactionType type,
     required DateTime date,
-    String note,
+    required String note,
     String? error,
   }) = _TransactionFormState;
 
@@ -14,5 +14,6 @@ class TransactionFormState with _$TransactionFormState {
     amount: '',
     type: TransactionType.expense,
     date: DateTime.now(),
+    note: ''
   );
 } 

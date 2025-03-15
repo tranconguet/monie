@@ -75,7 +75,6 @@ class TransactionFormBloc extends Bloc<TransactionFormEvent, TransactionFormStat
           print('TransactionFormBloc - Submitting transaction');
           final transaction = Transaction(
             id: _uuid.v4(),
-            title: state.type == TransactionType.income ? 'Income' : 'Expense',
             amount: amount,
             date: state.date,
             type: state.type,

@@ -10,9 +10,6 @@ class TransactionModel extends HiveObject {
   @HiveField(0)
   final String id;
   
-  @HiveField(1)
-  final String title;
-  
   @HiveField(2)
   final double amount;
   
@@ -33,7 +30,6 @@ class TransactionModel extends HiveObject {
 
   TransactionModel({
     required this.id,
-    required this.title,
     required this.amount,
     required this.date,
     required this.type,
@@ -44,7 +40,6 @@ class TransactionModel extends HiveObject {
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) => TransactionModel(
     id: json['id'] as String,
-    title: json['title'] as String,
     amount: json['amount'] as double,
     date: DateTime.parse(json['date'] as String),
     type: TransactionType.values[json['type'] as int],
@@ -55,7 +50,6 @@ class TransactionModel extends HiveObject {
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'title': title,
     'amount': amount,
     'date': date.toIso8601String(),
     'type': type.index,
@@ -67,7 +61,6 @@ class TransactionModel extends HiveObject {
   factory TransactionModel.fromEntity(Transaction transaction) {
     return TransactionModel(
       id: transaction.id,
-      title: transaction.title,
       amount: transaction.amount,
       date: transaction.date,
       type: transaction.type,
@@ -80,7 +73,6 @@ class TransactionModel extends HiveObject {
   Transaction toEntity() {
     return Transaction(
       id: id,
-      title: title,
       amount: amount,
       date: date,
       type: type,
@@ -91,5 +83,5 @@ class TransactionModel extends HiveObject {
   }
 
   @override
-  List<Object?> get props => [id, title, amount, date, type, category, description, createdAt];
+  List<Object?> get props => [id, amount, date, type, category, description, createdAt];
 }

@@ -30,7 +30,7 @@ class TransactionRepositoryImpl implements TransactionRepository {
     try {
       final transaction = await _localDataSource.getTransactionById(id);
       if (transaction == null) {
-        return Left(CacheFailure(message: 'Transaction not found'));
+        return const Left(CacheFailure(message: 'Transaction not found'));
       }
       return Right(transaction.toEntity());
     } catch (e) {

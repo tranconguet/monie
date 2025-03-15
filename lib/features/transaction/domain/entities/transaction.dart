@@ -3,7 +3,6 @@ import 'transaction_type.dart';
 
 class Transaction extends Equatable {
   final String id;
-  final String title;
   final double amount;
   final DateTime date;
   final TransactionType type;
@@ -13,7 +12,6 @@ class Transaction extends Equatable {
 
   const Transaction({
     required this.id,
-    required this.title,
     required this.amount,
     required this.date,
     required this.type,
@@ -23,5 +21,5 @@ class Transaction extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, title, amount, date, type, category, description, createdAt];
+  List<Object?> get props => [id, amount, date, type, category, description, createdAt];
 } 
