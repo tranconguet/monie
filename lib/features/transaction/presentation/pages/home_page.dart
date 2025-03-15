@@ -227,13 +227,38 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           Expanded(
                             child: DropdownButtonFormField<GroupByType>(
                               value: _groupByType,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 isDense: true,
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                   horizontal: 12,
                                   vertical: 8,
                                 ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
+                                  ),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    width: 2,
+                                  ),
+                                ),
                               ),
+                              icon: Icon(
+                                Icons.arrow_drop_down_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              dropdownColor: Theme.of(context).colorScheme.surface,
+                              borderRadius: BorderRadius.circular(12),
                               items: const [
                                 DropdownMenuItem(
                                   value: GroupByType.type,
@@ -268,49 +293,50 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   const SizedBox(height: 24),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _areAllGroupsExpanded = !_areAllGroupsExpanded;
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                Icons.receipt_long,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Icon(
+                                    Icons.receipt_long,
+                                    color: Theme.of(context).colorScheme.primary,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                const Text(
+                                  'Transactions',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
-                            const SizedBox(width: 12),
-                            const Text(
-                              'Transactions',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Icon(
+                              _areAllGroupsExpanded
+                                  ? Icons.unfold_less_rounded
+                                  : Icons.unfold_more_rounded,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ],
                         ),
-                        IconButton(
-                          icon: Icon(
-                            _areAllGroupsExpanded
-                                ? Icons.unfold_less_rounded
-                                : Icons.unfold_more_rounded,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          tooltip: _areAllGroupsExpanded
-                              ? 'Collapse all groups'
-                              : 'Expand all groups',
-                          onPressed: () {
-                            setState(() {
-                              _areAllGroupsExpanded = !_areAllGroupsExpanded;
-                            });
-                          },
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
