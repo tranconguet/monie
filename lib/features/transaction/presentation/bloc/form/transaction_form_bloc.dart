@@ -45,6 +45,7 @@ class TransactionFormBloc extends Bloc<TransactionFormEvent, TransactionFormStat
             amount: amount!,
             date: state.date,
             type: state.type,
+            createdAt: DateTime.now(),
           );
 
           final result = await _repository.createTransaction(transaction);

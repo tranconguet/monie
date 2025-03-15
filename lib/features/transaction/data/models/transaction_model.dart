@@ -28,6 +28,9 @@ class TransactionModel extends HiveObject {
   @HiveField(6)
   final String? note;
 
+  @HiveField(7)
+  final DateTime createdAt;
+
   TransactionModel({
     required this.id,
     required this.title,
@@ -36,6 +39,7 @@ class TransactionModel extends HiveObject {
     required this.type,
     this.category,
     this.note,
+    required this.createdAt,
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) => TransactionModel(
@@ -46,6 +50,7 @@ class TransactionModel extends HiveObject {
     type: TransactionType.values[json['type'] as int],
     category: json['category'] as String?,
     note: json['note'] as String?,
+    createdAt: DateTime.parse(json['createdAt'] as String),
   );
 
   Map<String, dynamic> toJson() => {
@@ -56,6 +61,7 @@ class TransactionModel extends HiveObject {
     'type': type.index,
     'category': category,
     'note': note,
+    'createdAt': createdAt.toIso8601String(),
   };
 
   factory TransactionModel.fromEntity(Transaction transaction) {
@@ -67,6 +73,7 @@ class TransactionModel extends HiveObject {
       type: transaction.type,
       category: transaction.category,
       note: transaction.note,
+      createdAt: transaction.createdAt,
     );
   }
 
@@ -79,9 +86,10 @@ class TransactionModel extends HiveObject {
       type: type,
       category: category,
       note: note,
+      createdAt: createdAt,
     );
   }
 
   @override
-  List<Object?> get props => [id, title, amount, date, type, category, note];
+  List<Object?> get props => [id, title, amount, date, type, category, note, createdAt];
 }

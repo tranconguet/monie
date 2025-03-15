@@ -9,6 +9,7 @@ class Transaction extends Equatable {
   final TransactionType type;
   final String? category;
   final String? note;
+  final DateTime createdAt;
 
   const Transaction({
     required this.id,
@@ -18,8 +19,9 @@ class Transaction extends Equatable {
     required this.type,
     this.category,
     this.note,
+    required this.createdAt,
   });
 
   @override
-  List<Object?> get props => [id, title, amount, date, type, category, note];
+  List<Object?> get props => [id, title, amount, date, type, category, note, createdAt];
 } 

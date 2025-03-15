@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import '../../domain/entities/transaction.dart';
 import '../../domain/entities/transaction_type.dart';
 import '../bloc/transaction_bloc.dart';
 import '../bloc/form/transaction_form_bloc.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -354,8 +356,19 @@ class _TransactionForm extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: Colors.white,
+                hintText: '0',
+                errorStyle: const TextStyle(
+                  color: Color(0xFFE53935),
+                  fontSize: 12,
+                ),
               ),
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: false,
+                signed: false,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
               onChanged: (value) {
                 context.read<TransactionFormBloc>()
                     .add(TransactionFormEvent.amountChanged(value));
@@ -584,10 +597,66 @@ class _TransactionForm extends StatelessWidget {
   }
 }
 
-class _TransactionList extends StatelessWidget {
+class _TransactionList extends StatefulWidget {
+  @override
+  State<_TransactionList> createState() => _TransactionListState();
+}
+
+class _TransactionListState extends State<_TransactionList> {
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  List<Transaction> _transactions = [];
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TransactionBloc, TransactionState>(
+    return BlocConsumer<TransactionBloc, TransactionState>(
+      listenWhen: (previous, current) {
+        return current.maybeWhen(
+          loaded: (_) => true,
+          orElse: () => false,
+        );
+      },
+      listener: (context, state) {
+        state.whenOrNull(
+          loaded: (newTransactions) {
+            final sortedNewTransactions = newTransactions.toList()
+              ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+            // Handle removals
+            for (var i = _transactions.length - 1; i >= 0; i--) {
+              final transaction = _transactions[i];
+              if (!sortedNewTransactions.contains(transaction)) {
+                final removedItem = transaction;
+                _transactions.removeAt(i);
+                _listKey.currentState?.removeItem(
+                  i,
+                  (context, animation) => _buildItem(removedItem, animation),
+                  duration: const Duration(milliseconds: 300),
+                );
+              }
+            }
+
+            // Handle additions
+            for (var i = 0; i < sortedNewTransactions.length; i++) {
+              final transaction = sortedNewTransactions[i];
+              if (!_transactions.contains(transaction)) {
+                if (i >= _transactions.length) {
+                  _transactions.add(transaction);
+                  _listKey.currentState?.insertItem(
+                    i,
+                    duration: const Duration(milliseconds: 300),
+                  );
+                } else {
+                  _transactions.insert(i, transaction);
+                  _listKey.currentState?.insertItem(
+                    i,
+                    duration: const Duration(milliseconds: 300),
+                  );
+                }
+              }
+            }
+          },
+        );
+      },
       builder: (context, state) {
         return state.when(
           initial: () {
@@ -648,69 +717,12 @@ class _TransactionList extends StatelessWidget {
                 ),
               );
             }
-            return ListView.builder(
-              itemCount: transactions.length,
-              itemBuilder: (context, index) {
-                final transaction = transactions[index];
-                final isIncome = transaction.type == TransactionType.income;
-                
-                return Card(
-                  elevation: 1,
-                  margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: isIncome 
-                            ? const Color(0xFFE8F5E9)  // Light green
-                            : const Color(0xFFFFEBEE), // Light red
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Icon(
-                        isIncome ? Icons.arrow_upward : Icons.arrow_downward,
-                        color: isIncome 
-                            ? const Color(0xFF2E7D32)  // Dark green
-                            : const Color(0xFFE53935), // Dark red
-                      ),
-                    ),
-                    title: Text(
-                      transaction.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF424242),
-                      ),
-                    ),
-                    subtitle: Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today,
-                          size: 14,
-                          color: Color(0xFF757575),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          DateFormat('yyyy-MM-dd').format(transaction.date),
-                          style: const TextStyle(
-                            color: Color(0xFF757575),
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: Text(
-                      '\$${transaction.amount.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: isIncome 
-                            ? const Color(0xFF2E7D32)  // Dark green
-                            : const Color(0xFFE53935), // Dark red
-                      ),
-                    ),
-                  ),
-                );
+
+            return AnimatedList(
+              key: _listKey,
+              initialItemCount: _transactions.length,
+              itemBuilder: (context, index, animation) {
+                return _buildItem(_transactions[index], animation);
               },
             );
           },
@@ -757,6 +769,82 @@ class _TransactionList extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildItem(Transaction transaction, Animation<double> animation) {
+    final isIncome = transaction.type == TransactionType.income;
+
+    return SizeTransition(
+      sizeFactor: animation,
+      child: FadeTransition(
+        opacity: animation,
+        child: SlideTransition(
+          position: animation.drive(
+            Tween(
+              begin: const Offset(1.0, 0.0),
+              end: const Offset(0.0, 0.0),
+            ).chain(CurveTween(curve: Curves.easeOutCubic)),
+          ),
+          child: Card(
+            elevation: 1,
+            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: isIncome 
+                      ? const Color(0xFFE8F5E9)  // Light green
+                      : const Color(0xFFFFEBEE), // Light red
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Icon(
+                  isIncome ? Icons.arrow_upward : Icons.arrow_downward,
+                  color: isIncome 
+                      ? const Color(0xFF2E7D32)  // Dark green
+                      : const Color(0xFFE53935), // Dark red
+                ),
+              ),
+              title: Text(
+                transaction.title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF424242),
+                ),
+              ),
+              subtitle: Row(
+                children: [
+                  const Icon(
+                    Icons.calendar_today,
+                    size: 14,
+                    color: Color(0xFF757575),
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    DateFormat('yyyy-MM-dd').format(transaction.date),
+                    style: const TextStyle(
+                      color: Color(0xFF757575),
+                    ),
+                  ),
+                ],
+              ),
+              trailing: Text(
+                '\$${transaction.amount}',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isIncome 
+                      ? const Color(0xFF2E7D32)  // Dark green
+                      : const Color(0xFFE53935), // Dark red
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
