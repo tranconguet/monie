@@ -4,6 +4,7 @@ import '../bloc/transaction_bloc.dart';
 import '../group_by_type.dart';
 import '../widgets/transaction_form.dart';
 import '../widgets/transaction_list.dart';
+import 'settings_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -75,6 +76,20 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           elevation: 0,
           backgroundColor: const Color(0xFF2E7D32), // Dark green
           foregroundColor: Colors.white,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings_rounded),
+              tooltip: 'Settings',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsPage(),
+                  ),
+                );
+              },
+            ),
+            const SizedBox(width: 4),
+          ],
         ),
         body: Container(
           decoration: const BoxDecoration(
