@@ -5,9 +5,16 @@ import '../../domain/entities/transaction.dart';
 import '../../domain/entities/transaction_type.dart';
 import '../bloc/transaction_bloc.dart';
 import 'transaction_list_item.dart';
+import '../group_by_type.dart';
+import 'grouped_transaction_list.dart';
 
 class TransactionList extends StatefulWidget {
-  const TransactionList({super.key});
+  final GroupByType groupByType;
+
+  const TransactionList({
+    super.key,
+    required this.groupByType,
+  });
 
   @override
   State<TransactionList> createState() => _TransactionListState();
@@ -101,46 +108,9 @@ class _TransactionListState extends State<TransactionList> {
             ),
           ),
           loaded: (transactions) {
-            if (transactions.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(
-                      Icons.receipt_long_outlined,
-                      size: 64,
-                      color: Color(0xFFBDBDBD),
-                    ),
-                    SizedBox(height: 16),
-                    Text(
-                      'No transactions yet',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Color(0xFF757575),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Add your first transaction above',
-                      style: TextStyle(
-                        color: Color(0xFF9E9E9E),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            return AnimatedList(
-              key: _listKey,
-              initialItemCount: _transactions.length,
-              itemBuilder: (context, index, animation) {
-                return TransactionListItem(
-                  transaction: _transactions[index],
-                  animation: animation,
-                );
-              },
+            return GroupedTransactionList(
+              transactions: transactions,
+              groupByType: widget.groupByType,
             );
           },
           error: (message) => Center(

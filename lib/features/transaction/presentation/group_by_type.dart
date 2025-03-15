@@ -2,5 +2,5 @@ enum GroupByType {
   type,
   day,
   month,
-  year
+  year,
 }

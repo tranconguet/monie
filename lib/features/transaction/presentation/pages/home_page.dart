@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:money_manager/features/transaction/presentation/group_by_type.dart';
 import '../bloc/transaction_bloc.dart';
+import '../group_by_type.dart';
 import '../widgets/transaction_form.dart';
 import '../widgets/transaction_list.dart';
 
@@ -14,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   bool _isFormExpanded = true;
+  GroupByType _groupByType = GroupByType.type;
   late final AnimationController _animationController;
   late final Animation<double> _animation;
 
@@ -177,7 +178,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         const SizedBox(width: 12),
                         Expanded(
                           child: DropdownButtonFormField<GroupByType>(
-                            value: GroupByType.type,
+                            value: _groupByType,
                             decoration: InputDecoration(
                               isDense: true,
                               contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -231,7 +232,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                               ),
                             ],
                             onChanged: (value) {
-                              // Will implement grouping logic later
+                              if (value != null) {
+                                setState(() {
+                                  _groupByType = value;
+                                });
+                              }
                             },
                           ),
                         ),
@@ -276,8 +281,10 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Expanded(
-                  child: TransactionList(),
+                Expanded(
+                  child: TransactionList(
+                    groupByType: _groupByType,
+                  ),
                 ),
               ],
             ),
