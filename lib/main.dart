@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,8 +17,7 @@ import 'features/transaction/presentation/pages/home_page.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  
+
   print('Initializing Hive...');
   await Hive.initFlutter();
   
@@ -54,8 +52,6 @@ void main() async {
     ),
   );
 
-  // Remove splash screen after initialization
-  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {

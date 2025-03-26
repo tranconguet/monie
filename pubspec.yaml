@@ -122,3 +122,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_launcher_icons:
+  image_path_ios: "assets/icon/icon.png"
+  ios: true # can specify file name here e.g. "My-App-Icon"
+  remove_alpha_ios: true
+  background_color_ios: "#ffffff"
