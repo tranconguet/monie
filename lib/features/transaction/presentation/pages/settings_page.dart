@@ -8,6 +8,7 @@ import '../../../../core/l10n/app_localizations.dart';
 import '../../data/models/transaction_model.dart';
 import '../bloc/transaction_bloc.dart';
 import '../../../../core/providers/language_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -332,7 +333,8 @@ class SettingsPage extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                     onTap: () {
-                      // TODO: Open GitHub repository
+                      final Uri url = Uri.parse('https://github.com/tranconguet/monie');
+                      launchUrl(url);
                     },
                   ),
                 ],
