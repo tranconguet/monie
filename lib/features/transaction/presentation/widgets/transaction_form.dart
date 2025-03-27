@@ -33,6 +33,15 @@ class TransactionForm extends StatelessWidget {
         if (state == TransactionFormState.initial()) {
           _formKey.currentState?.reset();
         }
+        if (state.isSuccess == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.transactionAdded),
+              backgroundColor: Colors.green,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        }
       },
       buildWhen: (pre, next) {
         return pre != next;
@@ -360,13 +369,6 @@ class TransactionForm extends StatelessWidget {
                   if (_formKey.currentState?.validate() ?? false) {
                     context.read<TransactionFormBloc>()
                         .add(const TransactionFormEvent.submitted());
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(l10n.transactionAdded),
-                        backgroundColor: Colors.green,
-                        behavior: SnackBarBehavior.floating,
-                      ),
-                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(

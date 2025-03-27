@@ -28,13 +28,15 @@ class TransactionFormState with _$TransactionFormState {
     required DateTime date,
     String? description,
     String? error,
+    bool? isSuccess
   }) = _TransactionFormState;
 
-  factory TransactionFormState.initial() => TransactionFormState(
+  factory TransactionFormState.initial({bool isSuccess = false}) => TransactionFormState(
         amount: '',
         description: '',
         type: TransactionType.expense,
         date: DateTime.now(),
+        isSuccess: isSuccess
       );
 }
 
@@ -91,6 +93,7 @@ class TransactionFormBloc extends Bloc<TransactionFormEvent, TransactionFormStat
             },
             (_) {
               print('TransactionFormBloc - Transaction created successfully, refreshing list');
+              emit(TransactionFormState.initial(isSuccess: true));
               emit(TransactionFormState.initial());
               _transactionBloc.add(const TransactionEvent.refresh());
             },
