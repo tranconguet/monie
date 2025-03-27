@@ -141,40 +141,39 @@ class _GroupedTransactionListState extends State<GroupedTransactionList> {
     
     if (widget.transactions.isEmpty) {
       return Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(vertical: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(
-                Icons.receipt_long_outlined,
-                size: 64,
-                color: Color(0xFFBDBDBD),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.receipt_long_outlined,
+              size: 64,
+              color: Color(0xFFBDBDBD),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.noTransactions,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF757575),
               ),
-              const SizedBox(height: 16),
-              Text(
-                l10n.noTransactions,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF757575),
-                ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              l10n.addFirstTransaction,
+              style: const TextStyle(
+                color: Color(0xFF9E9E9E),
               ),
-              const SizedBox(height: 8),
-              Text(
-                l10n.addFirstTransaction,
-                style: const TextStyle(
-                  color: Color(0xFF9E9E9E),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }
 
     return ListView.builder(
       itemCount: _groupedTransactions.length,
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       itemBuilder: (context, groupIndex) {
         final group = _groupedTransactions[groupIndex];
         final isIncomeGroup = group.transactions.first.type == TransactionType.income;
