@@ -825,6 +825,7 @@ mixin _$TransactionFormState {
   DateTime get date => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
+  bool? get isSuccess => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $TransactionFormStateCopyWith<TransactionFormState> get copyWith =>
@@ -842,7 +843,8 @@ abstract class $TransactionFormStateCopyWith<$Res> {
       TransactionType type,
       DateTime date,
       String? description,
-      String? error});
+      String? error,
+      bool? isSuccess});
 }
 
 /// @nodoc
@@ -864,6 +866,7 @@ class _$TransactionFormStateCopyWithImpl<$Res,
     Object? date = null,
     Object? description = freezed,
     Object? error = freezed,
+    Object? isSuccess = freezed,
   }) {
     return _then(_value.copyWith(
       amount: null == amount
@@ -886,6 +889,10 @@ class _$TransactionFormStateCopyWithImpl<$Res,
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      isSuccess: freezed == isSuccess
+          ? _value.isSuccess
+          : isSuccess // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -903,7 +910,8 @@ abstract class _$$_TransactionFormStateCopyWith<$Res>
       TransactionType type,
       DateTime date,
       String? description,
-      String? error});
+      String? error,
+      bool? isSuccess});
 }
 
 /// @nodoc
@@ -922,6 +930,7 @@ class __$$_TransactionFormStateCopyWithImpl<$Res>
     Object? date = null,
     Object? description = freezed,
     Object? error = freezed,
+    Object? isSuccess = freezed,
   }) {
     return _then(_$_TransactionFormState(
       amount: null == amount
@@ -944,6 +953,10 @@ class __$$_TransactionFormStateCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      isSuccess: freezed == isSuccess
+          ? _value.isSuccess
+          : isSuccess // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -956,7 +969,8 @@ class _$_TransactionFormState implements _TransactionFormState {
       required this.type,
       required this.date,
       this.description,
-      this.error});
+      this.error,
+      this.isSuccess});
 
   @override
   final String amount;
@@ -968,10 +982,12 @@ class _$_TransactionFormState implements _TransactionFormState {
   final String? description;
   @override
   final String? error;
+  @override
+  final bool? isSuccess;
 
   @override
   String toString() {
-    return 'TransactionFormState(amount: $amount, type: $type, date: $date, description: $description, error: $error)';
+    return 'TransactionFormState(amount: $amount, type: $type, date: $date, description: $description, error: $error, isSuccess: $isSuccess)';
   }
 
   @override
@@ -984,12 +1000,14 @@ class _$_TransactionFormState implements _TransactionFormState {
             (identical(other.date, date) || other.date == date) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.isSuccess, isSuccess) ||
+                other.isSuccess == isSuccess));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, amount, type, date, description, error);
+  int get hashCode => Object.hash(
+      runtimeType, amount, type, date, description, error, isSuccess);
 
   @JsonKey(ignore: true)
   @override
@@ -1005,7 +1023,8 @@ abstract class _TransactionFormState implements TransactionFormState {
       required final TransactionType type,
       required final DateTime date,
       final String? description,
-      final String? error}) = _$_TransactionFormState;
+      final String? error,
+      final bool? isSuccess}) = _$_TransactionFormState;
 
   @override
   String get amount;
@@ -1017,6 +1036,8 @@ abstract class _TransactionFormState implements TransactionFormState {
   String? get description;
   @override
   String? get error;
+  @override
+  bool? get isSuccess;
   @override
   @JsonKey(ignore: true)
   _$$_TransactionFormStateCopyWith<_$_TransactionFormState> get copyWith =>
