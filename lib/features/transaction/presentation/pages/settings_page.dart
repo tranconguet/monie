@@ -297,7 +297,7 @@ class SettingsPage extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(
-                      '1.3.1',
+                      '1.3.2',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
@@ -334,7 +334,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                     onTap: () {
                       final Uri url = Uri.parse('https://github.com/tranconguet/monie');
-                      launchUrl(url);
+                      launchUrl(url, mode: LaunchMode.externalApplication);
                     },
                   ),
                 ],
