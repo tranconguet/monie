@@ -334,7 +334,7 @@ class SettingsPage extends StatelessWidget {
                     ),
                     onTap: () {
                       final Uri url = Uri.parse('https://github.com/tranconguet/monie');
-                      launchUrl(url);
+                      launchUrl(url, mode: LaunchMode.externalApplication);
                     },
                   ),
                 ],

@@ -56,6 +56,7 @@ class TransactionForm extends StatelessWidget {
               const SizedBox(height: 8),
               TextFormField(
                 controller: _amountController,
+                maxLength: 11,
                 decoration: InputDecoration(
                   labelText: l10n.amount,
                   floatingLabelBehavior: FloatingLabelBehavior.auto,
