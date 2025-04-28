@@ -297,7 +297,7 @@ class SettingsPage extends StatelessWidget {
                       ),
                     ),
                     subtitle: Text(
-                      '1.3.2',
+                      '1.3.3',
                       style: TextStyle(
                         color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),

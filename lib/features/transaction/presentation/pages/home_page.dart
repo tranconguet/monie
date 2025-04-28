@@ -8,7 +8,6 @@ import '../group_by_type.dart';
 import '../widgets/transaction_form.dart';
 import '../widgets/transaction_list.dart';
 import 'settings_page.dart';
-import 'package:flutter/rendering.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
